@@ -16,12 +16,19 @@ The goal of **DiskKnight** is to provide a fun experience that allows users to e
 ### Planned Features
 - Album and artist metadata fetched from the MusicBrainz API
 - Album artwork retrieved via the Cover Art Archive
+- React-based frontend built with **Vite**
+- Album and artist metadata fetched from the **MusicBrainz API**
+- Album artwork retrieved via the **Cover Art Archive**
+- No user accounts or authentication required
+- Simple, fast development workflow
+
+### Planned Features
 - Search interface for albums and artists
 - Ability to save albums to a personal collection
 - Ranking and rating system for albums
 - Offline-friendly storage using browser-based persistence
 - Accounts for users to view others' profiles and rankings
-- Progressive Web App support for installation on mobile and desktop
+- Progressive Web App (PWA) support for installation on mobile and desktop
 
 ---
 
