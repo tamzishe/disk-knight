@@ -9,7 +9,7 @@ function App() {
   useEffect(() => {
     
     async function loadAlbum() {
-      const albumName = "Views by Drake";
+      const albumName = "Views";
       const albumData = await getAlbumBySearch(albumName);
       if (!albumData.releases || albumData.releases.length === 0) { // check if we got results
         console.log("No releases found for album:", albumName);
