@@ -39,3 +39,6 @@ coverage/
 # Optional: ignore public assets if built
 public/*.js
 public/*.map
+
+#workspaces
+*.code-workspace

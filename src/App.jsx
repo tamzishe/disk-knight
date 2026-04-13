@@ -1,10 +1,11 @@
 import fetchAlbums from './func/fetchAlbums';
 import AlbumCard from './components/AlbumCard/AlbumCard';
+import AlbumSearchBar from './components/SearchBar/SearchBar';
+import { useState } from 'react';
 
 function App() {
-  const album = fetchAlbums("Views");
-
-  if (!album) return <div>Loading...</div>;
+  const [query, setQuery] = useState(null); // what we're searching for
+  const album = fetchAlbums(query);            // results from that search
 
   return (
     <div>
@@ -13,7 +14,13 @@ function App() {
         <h1>Disk Knight</h1>
       </div>
       <h1>Welcome to Disk Knight</h1>
-      <AlbumCard title={album.album.title} cover={album.cover} />
+      <AlbumSearchBar onSearch={(q) => setQuery(q)} />
+      {!query && <p>Search for an album!</p>} 
+      {/* No Query */}
+      {query && !album && <p>Loading...</p>}
+      {/* No album received yet */}
+      {album && <AlbumCard title={album.album.title} cover={album.cover} />}
+      {/* received the album! */}
     </div>
   );
 }
