@@ -6,4 +6,25 @@ const mbApi = new MusicBrainzApi({
     appContactInfo: 'tamzmanrock@gmail.com',
 });
 
+
+// add functions to mbApi if needed
+// get the artist by mbid
+// use the query function from the library
+export async function getAlbumBySearch(albumName) {
+    try {
+        const result = await mbApi.search('release', { query: albumName, limit: 5 });
+        return result;
+    } catch (error) {
+        console.error("Error fetching album:", error);
+        throw error;
+    }
+}
+/*A release group, as the name suggests, is used to group releases into a single logical entity. 
+Every release belongs to one, and only one, release group.
+Both release groups and releases are "albums" in a general sense. 
+But there is an important difference: a release is something you can buy, such as a CD or a digital download, 
+while a release group embraces the overall concept of an album.*/
+
 export default mbApi;
+
+// cool idea: scan a cd's barcode and get the album info from musicbrainz
