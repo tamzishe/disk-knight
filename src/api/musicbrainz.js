@@ -12,7 +12,8 @@ const mbApi = new MusicBrainzApi({
 // use the query function from the library
 export async function getAlbumBySearch(albumName) {
     try {
-        const result = await mbApi.search('release', { query: albumName, limit: 5 });
+        const result = await mbApi.search('release-group', { query: albumName, limit: 10 });
+        console.log(result);
         return result;
     } catch (error) {
         console.error("Error fetching album:", error);
