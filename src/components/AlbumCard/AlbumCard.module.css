@@ -1,0 +1,11 @@
+.card {
+    background: #e4e4e4;
+    padding: 16px;
+    border-radius: 8px;
+    width: 250px;
+    height: auto
+}
+.icon {
+    width: 250px;
+    height: auto
+}

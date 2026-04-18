@@ -1,43 +1,28 @@
-import {useEffect, useState} from 'react'
-import { getAlbumBySearch } from './api/musicbrainz.js';
-import { fetchCoverArt } from './api/coverartarchive.js';
+import fetchAlbums from './func/fetchAlbums';
+import AlbumCard from './components/AlbumCard/AlbumCard';
+import AlbumSearchBar from './components/SearchBar/SearchBar';
+import { useState } from 'react';
 
 function App() {
-  // usestate is used to "rerender" the page when data changed
-  // useEffect is used to run code on component load
-  const [album, setAlbumData] = useState(null);
-  useEffect(() => {
-    
-    async function loadAlbum() {
-      const albumName = "Views by Drake";
-      const albumData = await getAlbumBySearch(albumName);
-      if (!albumData.releases || albumData.releases.length === 0) { // check if we got results
-        console.log("No releases found for album:", albumName);
-        return;
-      }
-      const cover = await fetchCoverArt(albumData.releases[0].id);
-      setAlbumData({ album: albumData.releases[0], cover: cover });
-    }
-    loadAlbum();
-  }, []); // empty array means this runs once on a component load
-  if (!album) {
-    return <div>Loading...</div>;
-  }
+  const [query, setQuery] = useState(null); // what we're searching for
+  const album = fetchAlbums(query);            // results from that search
+
   return (
     <div>
-      <div className="Header"> {/* create header*/}
-        <img src="/icon-192x192.png" alt="Logo" className="logo" />  
+      <div className="Header">
+        <img src="/icon-192x192.png" alt="Logo" className="logo" />
         <h1>Disk Knight</h1>
       </div>
       <h1>Welcome to Disk Knight</h1>
-      <p>If you see an album cover, it's working!</p>
-      <div>
-        <h2>{album.album.title}</h2>
-        <img src={album.cover} alt="Album Cover" />
-      </div>
+      <AlbumSearchBar onSearch={(q) => setQuery(q)} />
+      {!query && <p>Search for an album!</p>} 
+      {/* No Query */}
+      {query && !album && <p>Loading...</p>}
+      {/* No album received yet */}
+      {album && <AlbumCard title={album.album.title} cover={album.cover} />}
+      {/* received the album! */}
     </div>
-  )
+  );
 }
 
-export default App
-
+export default App;
