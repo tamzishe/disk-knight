@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 function App() {
   const [query, setQuery] = useState(null); // what we're searching for
-  const album = fetchAlbums(query);            // results from that search
+  const results = fetchAlbums(query, 10);            // results from that search
 
   return (
     <div>
@@ -17,10 +17,16 @@ function App() {
       <AlbumSearchBar onSearch={(q) => setQuery(q)} />
       {!query && <p>Search for an album!</p>} 
       {/* No Query */}
-      {query && !album && <p>Loading...</p>}
+      {query && !results && <p>Loading...</p>}
       {/* No album received yet */}
-      {album && <AlbumCard title={album.album.title} cover={album.cover} />}
-      {/* received the album! */}
+      {results && results.albums.map((album, i) =>(
+        <AlbumCard
+        key={album.id}
+        title={album.title}
+        cover={results.covers[i]}
+        />
+      ))}
+      {/* received the albums! */}
     </div>
   );
 }
