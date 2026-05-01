@@ -10,9 +10,10 @@ const mbApi = new MusicBrainzApi({
 // add functions to mbApi if needed
 // get the artist by mbid
 // use the query function from the library
-export async function getAlbumBySearch(albumName) {
+export async function getAlbumBySearch(albumName, artist) {
     try {
-        const result = await mbApi.search('release-group', { query: albumName, limit: 10 });
+        const queryString = artist ? `${albumName} artist:${artist}` : albumName;
+const result = await mbApi.search('release-group', { query: queryString, limit: 20 });
         console.log(result);
         return result;
     } catch (error) {
