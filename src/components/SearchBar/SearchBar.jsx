@@ -11,8 +11,16 @@ function Search({search, setSearch, onSearch}){
     />
 };
 export default function AlbumSearchBar({onSearch}){
-    const [search, setSearch] = useState('');
+    const [album, setAlbum] = useState('');
+    const [artist, setArtist] = useState('');
+
+    const handleSearch = () => {
+        if (!album) return;
+        onSearch(album, artist);
+    };
+    
     return <div>
-        <Search search={search} setSearch={setSearch} onSearch={onSearch} />
-    </div>
+            <Search search={album} setSearch={setAlbum} onSearch={handleSearch} />
+            <Search search={artist} setSearch={setArtist} onSearch={handleSearch} />
+        </div>
 }
