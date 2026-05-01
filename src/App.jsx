@@ -2,10 +2,11 @@ import fetchAlbums from './func/fetchAlbums';
 import AlbumCard from './components/AlbumCard/AlbumCard';
 import AlbumSearchBar from './components/SearchBar/SearchBar';
 import { useState } from 'react';
+import styles from './App.module.css';
 
 function App() {
   const [query, setQuery] = useState(null); // what we're searching for
-  const results = fetchAlbums(query, 10);            // results from that search
+  const results = fetchAlbums(query?.album, query?.artist, 12);           // results from that search
 
   return (
     <div>
@@ -14,19 +15,21 @@ function App() {
         <h1>Disk Knight</h1>
       </div>
       <h1>Welcome to Disk Knight</h1>
-      <AlbumSearchBar onSearch={(q) => setQuery(q)} />
-      {!query && <p>Search for an album!</p>} 
+      <AlbumSearchBar onSearch={(album, artist) => setQuery({album, artist})} />
+      <div className={styles.albumList}>
+      {!query?.album && <p>Search for an album!</p>}
       {/* No Query */}
-      {query && !results && <p>Loading...</p>}
+      {query?.album && !results && <p>Loading...</p>}
       {/* No album received yet */}
       {results && results.albums.map((album, i) =>(
         <AlbumCard
-        key={album.id}
-        title={album.title}
-        cover={results.covers[i]}
+          key={album.id}
+          title={album.title}
+          cover={album.cover}
         />
       ))}
       {/* received the albums! */}
+      </div>
     </div>
   );
 }
