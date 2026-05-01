@@ -1,30 +1,49 @@
 import { useState, useEffect } from 'react';
 import { getAlbumBySearch } from '../api/musicbrainz.js';
 import { fetchCoverArt } from '../api/coverartarchive.js';
+import { searchAlbums } from '../api/itunes.js';
 
-function fetchAlbums(albumName, reqNumToShow) {
+// depricated; switched back to musicbrainz
+// function fetchAlbums(albumName, reqNumToShow){
+//   const [albums, setAlbumData] = useState(null);
+//   useEffect(() => {
+//     async function loadAlbum() {
+//       if (!albumName) return; // stop on start errors
+//       const albumData = await searchAlbums(albumName, reqNumToShow); // put the upper limit
+//       console.log("Received album data");
+//       if (!albumData || albumData.length == 0) return; // nothing
+//       const numberToShow = (reqNumToShow > albumData.length) ? albumData.length : reqNumToShow;
+//       setAlbumData({ albums: albumData.slice(0, numberToShow)});
+//     } loadAlbum();
+//   }, [albumName, reqNumToShow]);
+//   return albums;
+// }
+
+
+function fetchAlbums(albumName, artist, reqNumToShow) {
   const [albums, setAlbumData] = useState(null);
-  
   useEffect(() => {
     async function loadAlbum() {
-      if (!albumName) return; // stop on start errors
-      const rawData = await getAlbumBySearch(albumName); 
-      const albumData = rawData["release-groups"].filter(group => group.score > 70); // filter out bad responses!
-      console.log("Received album data as release-group");
-      // get the albums, limited to 10 in getAlbumBySearch
-      if (!albumData || albumData.length == 0) return; // nothing
-      const numberToShow = (reqNumToShow > albumData.length) ? albumData.length : reqNumToShow;
-      // promises are requests that we send, move on and wait to receive simply put
+      if (!albumName) return;
+      const rawData = await getAlbumBySearch(albumName, artist);
+      const albumData = rawData["release-groups"].filter(group => group.score > 70).filter(group => group["primary-type"] === "Album").filter(group => !group["secondary-types"] || group["secondary-types"].length === 0);;
+      if (!albumData || albumData.length === 0) return;
+      const numberToShow = Math.min(reqNumToShow, albumData.length);
       const coverPromises = albumData.slice(0, numberToShow).map(group => fetchCoverArt(group.id));
-      //map is almost like a for loop that goes through an array and transforms it into something new
-      console.log("Getting covers!");
       const covers = await Promise.all(coverPromises);
-      setAlbumData({ albums: albumData.slice(0, numberToShow), covers: covers });
+      const merged = albumData.slice(0, numberToShow).map((group, i) => ({
+        id: group.id,
+        title: group.title,
+        artist: group["artist-credit"]?.[0]?.name || "Unknown Artist",
+        cover: covers[i],
+        releaseDate: group["first-release-date"] || null,
+        genre: null, // MusicBrainz doesn't have genre in this endpoint
+        trackCount: null,
+      }));
+      setAlbumData({ albums: merged });
     }
     loadAlbum();
   }, [albumName, reqNumToShow]);
-
   return albums;
 }
-
 export default fetchAlbums;
