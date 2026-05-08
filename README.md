@@ -12,11 +12,11 @@ The goal of **DiskKnight** is to provide a fun experience that allows users to e
 
 ### In Current Development
 - React-based frontend built with Vite
-
-### Planned Features
 - Album and artist metadata fetched from the MusicBrainz API
 - Album artwork retrieved via the Cover Art Archive
 - Search interface for albums and artists
+
+### Planned Features
 - Ability to save albums to a personal collection
 - Ranking and rating system for albums
 - Offline-friendly storage using browser-based persistence
