@@ -15,6 +15,7 @@ function ArtistSearchPage() {
         <h1>Disk Knight</h1>
       </div>
       <h1>Search Artists</h1>
+      <HomeButton/>
       <ArtistSearchBar onSearch={(artist) => setQuery(artist)} />
       <div className={styles.albumList}>
         {!query && <p>Search for an artist!</p>}
