@@ -4,17 +4,17 @@ const coverArtArchiveApiClient = new CoverArtArchiveApi();
 
 export async function fetchCoverArt(releaseMbid, coverType = '') {
     try {
-        const coverInfo = await coverArtArchiveApiClient.getReleaseCovers(releaseMbid);
+        const coverInfo = await coverArtArchiveApiClient.getReleaseGroupCovers(releaseMbid);
         for(const image of coverInfo.images) {
             if (image.front) {
                 console.log(`Cover art front=${image.front} back=${image.back} url=${image.image}`);
                 return image.image;
             }
         }
-        return null;
+        return '/blank_disc.png';
     } catch (error) {
         console.error("Error fetching cover art:", error);
-        return null;
+        return '/blank_disc.png';
     }
 }
 
