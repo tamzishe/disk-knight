@@ -13,6 +13,7 @@ export default function Home() {
       <p>What would you like to do?</p>
       <button onClick={() => navigate('/album-search')}>Search Albums</button>
       <button onClick={() => navigate('/artist-search')}>Search Artists</button>
+      <button onClick={() => navigate('/collection/currentUser')}>My Collection</button>
     </div>
   );
 }
