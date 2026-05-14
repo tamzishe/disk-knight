@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getAlbumBySearch } from '../api/musicbrainz.js';
 import { fetchCoverArt } from '../api/coverartarchive.js';
-import { searchAlbums } from '../api/itunes.js';
+// import { searchAlbums } from '../api/itunes.js';
 
 // depricated; switched back to musicbrainz
 // function fetchAlbums(albumName, reqNumToShow){
@@ -26,7 +26,14 @@ function fetchAlbums(albumName, artist, reqNumToShow) {
     async function loadAlbum() {
       if (!albumName) return;
       const rawData = await getAlbumBySearch(albumName, artist);
-      const albumData = rawData["release-groups"].filter(group => group.score > 70).filter(group => group["primary-type"] === "Album").filter(group => !group["secondary-types"] || group["secondary-types"].length === 0);;
+      const albumData = rawData["release-groups"].filter(group => group.score > 50)
+        .filter(group => group["primary-type"] === "Album" || group["primary-type"] === "EP" )
+        .filter(group => {
+            const secondary = group["secondary-types"] || [];
+            return !secondary.includes("Live") && 
+                  !secondary.includes("Compilation") &&
+                  !secondary.includes("Remix");
+        });
       if (!albumData || albumData.length === 0) return;
       const numberToShow = Math.min(reqNumToShow, albumData.length);
       const coverPromises = albumData.slice(0, numberToShow).map(group => fetchCoverArt(group.id));
@@ -43,7 +50,7 @@ function fetchAlbums(albumName, artist, reqNumToShow) {
       setAlbumData({ albums: merged });
     }
     loadAlbum();
-  }, [albumName, reqNumToShow]);
+  }, [albumName, artist, reqNumToShow]);
   return albums;
 }
 export default fetchAlbums;

@@ -24,6 +24,7 @@
   "dependencies": {
     "musicbrainz-api": "^0.27.1",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.15.0"
   }
 }
