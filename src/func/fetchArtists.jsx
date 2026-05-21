@@ -13,17 +13,17 @@ function fetchArtists(artistName, reqNumToShow) {
         if (!artistData || artistData.length === 0) return;
         const numberToShow = Math.min(reqNumToShow, artistData.length);
         
-        const imagePromises = artistData.slice(0, numberToShow).map(a => 
-            fetchArtistImage(a.name)
-        );
-        const images = await Promise.all(imagePromises);
-        console.log("images:", images);
+        // const imagePromises = artistData.slice(0, numberToShow).map(a => 
+        //     fetchArtistImage(a.name)
+        // );
+        // const images = await Promise.all(imagePromises);
+        // console.log("images:", images);
         const merged = artistData.slice(0, numberToShow).map((a, i) => ({
             id: a.id,
             name: a.name,
             disambiguation: a.disambiguation || null,
             type: a.type || null,
-            image: images[i],
+            // image: images[i],
         }));
         setArtistData({ artists: merged });
     }
