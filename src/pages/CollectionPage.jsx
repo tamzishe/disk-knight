@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { getCollection, removeFromCollection } from "../func/collection";
+import { getCollection, removeFromCollection, isListened, isInCollection, getListened, removeFromListened } from "../func/collection";
+import { handleCollect, handleListen } from '../func/handlers.js';
 import AlbumCard from "../components/AlbumCard/AlbumCard";
 import AlbumModal from "../components/AlbumModal/AlbumModal";
 import HomeButton from "../components/Buttons/HomeButton";
@@ -9,12 +10,9 @@ import { useParams } from "react-router-dom";
 export default function CollectionPage() {
   const [collection, setCollection] = useState(getCollection());
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+  const [listened, setListened] = useState(getListened());
   const { username } = useParams();
-  const handleRemove = () => {
-    removeFromCollection(selectedAlbum.id);
-    setCollection(getCollection()); // refresh the displayed list
-    setSelectedAlbum(null);
-  };
+  
 
   return (
     <div>
@@ -38,9 +36,17 @@ export default function CollectionPage() {
       {selectedAlbum && (
         <AlbumModal
           album={selectedAlbum}
-          onCollect={handleRemove}
+          onCollect={() => handleCollect(selectedAlbum, () => {
+            setCollection(getCollection());
+            setSelectedAlbum(null)
+          })}
+          onListen={() => handleListen(selectedAlbum, () => {
+            setListened(getListened()); 
+            setSelectedAlbum(null);
+          })}
           onClose={() => setSelectedAlbum(null)}
-          isCollected={true}
+          isCollected={isInCollection(selectedAlbum.id)}
+          isListened={isListened(selectedAlbum?.id)}
         />
       )}
     </div>
