@@ -12,7 +12,6 @@ function fetchArtists(artistName, reqNumToShow) {
         const artistData = rawData.artists.filter(a => a.score > 70);
         if (!artistData || artistData.length === 0) return;
         const numberToShow = Math.min(reqNumToShow, artistData.length);
-        
         // const imagePromises = artistData.slice(0, numberToShow).map(a => 
         //     fetchArtistImage(a.name)
         // );
