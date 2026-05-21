@@ -29,3 +29,27 @@
     height: auto;
     border-radius: 12px
 }
+
+.ratings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.ratingButton {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: white;
+}
+
+.ratingSelected {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #000;
+  cursor: pointer;
+  background: #000;
+  color: white;
+}
