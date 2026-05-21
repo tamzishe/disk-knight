@@ -1,6 +1,6 @@
 import styles from './AlbumModal.module.css';
 
-export default function AlbumModal({ album, onCollect, onClose, isCollected }) {
+export default function AlbumModal({ album, onCollect, onClose, onListen, isCollected, isListened }) {
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -9,6 +9,9 @@ export default function AlbumModal({ album, onCollect, onClose, isCollected }) {
         <p>{album.artist}</p>
         <button onClick={onCollect}>
           {isCollected ? 'Remove from Collection' : 'Collect'}
+        </button>
+        <button onClick={onListen}>
+          {isListened ? 'Remove from Listened' : 'Mark as Listened'}
         </button>
         <button disabled>Add to List</button>
         <button onClick={onClose}>Cancel</button>
