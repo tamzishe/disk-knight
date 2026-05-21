@@ -15,10 +15,12 @@ The goal of **DiskKnight** is to provide a fun experience that allows users to e
 - Album and artist metadata fetched from the MusicBrainz API
 - Album artwork retrieved via the Cover Art Archive
 - Search interface for albums and artists
+- Ability to save albums to a personal collection
+- Rating system for albums
 
 ### Planned Features
 - Ability to save albums to a personal collection
-- Ranking and rating system for albums
+- Ranking system for albums (using lists)
 - Offline-friendly storage using browser-based persistence
 - Accounts for users to view others' profiles and rankings
 - Progressive Web App support for installation on mobile and desktop
