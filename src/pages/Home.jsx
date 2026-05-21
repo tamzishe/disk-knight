@@ -14,6 +14,7 @@ export default function Home() {
       <button onClick={() => navigate('/album-search')}>Search Albums</button>
       <button onClick={() => navigate('/artist-search')}>Search Artists</button>
       <button onClick={() => navigate('/collection/currentUser')}>My Collection</button>
+      <button onClick={() => navigate('/listened/currentUser')}>Listened</button>
     </div>
   );
 }
