@@ -42,6 +42,7 @@ export default function ListenedPage() {
             setListened(getListened());
             setSelectedAlbum(null);
           })}
+          onRate={() => setSelectedAlbum({...selectedAlbum})}
           onClose={() => setSelectedAlbum(null)}
           isCollected={isInCollection(selectedAlbum.id)}
           isListened={isListened(selectedAlbum?.id)}
