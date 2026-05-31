@@ -3,6 +3,7 @@ import ArtistSearchBar from '../components/SearchBar/ArtistSearchBar';
 import ArtistCard from '../components/ArtistCard/ArtistCard';
 import fetchArtists from '../func/fetchArtists';
 import styles from '../css/AlbumSearchPage.module.css';
+import HomeButton from '../components/Buttons/HomeButton';
 
 function ArtistSearchPage() {
   const [query, setQuery] = useState(null);
@@ -15,6 +16,7 @@ function ArtistSearchPage() {
         <h1>Disk Knight</h1>
       </div>
       <h1>Search Artists</h1>
+      <HomeButton/>
       <ArtistSearchBar onSearch={(artist) => setQuery(artist)} />
       <div className={styles.albumList}>
         {!query && <p>Search for an artist!</p>}
