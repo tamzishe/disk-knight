@@ -19,7 +19,6 @@ The goal of **DiskKnight** is to provide a fun experience that allows users to e
 - Rating system for albums
 
 ### Planned Features
-- Ability to save albums to a personal collection
 - Ranking system for albums (using lists)
 - Offline-friendly storage using browser-based persistence
 - Accounts for users to view others' profiles and rankings
