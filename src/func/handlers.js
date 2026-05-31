@@ -1,11 +1,4 @@
-import { 
-  addToCollection, 
-  removeFromCollection, 
-  isInCollection,
-  addToListened, 
-  removeFromListened, 
-  isListened 
-} from './collection';
+import { addToCollection, removeFromCollection, isInCollection, addToListened, removeFromListened, isListened } from "./collection";
 
 export function handleCollect(album, onDone) {
   if (isInCollection(album.id)) {

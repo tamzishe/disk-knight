@@ -35,6 +35,7 @@ function AlbumSearchPage() {
               title={album.title}
               artistName={album.artistName}
               cover={album.cover}
+              albumId={album.id}
               onClick={() => setSelectedAlbum(album)}
             />
           ))}

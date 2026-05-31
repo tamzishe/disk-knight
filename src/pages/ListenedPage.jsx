@@ -30,6 +30,7 @@ export default function ListenedPage() {
             key={album.id}
             title={album.title}
             cover={album.cover}
+            albumId={album.id}
             onClick={() => setSelectedAlbum(album)}
           />
         ))}

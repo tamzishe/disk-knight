@@ -1,11 +1,11 @@
 const RATINGS = [
-  { label: 'Perfect', value: 10 },
-  { label: 'Excellent', value: 9 },
-  { label: 'Amazing', value: 8 },
-  { label: 'Great', value: 7 },
-  { label: 'Good', value: 6 },
-  { label: 'Mid', value: 5 },
-  { label: 'Bad', value: 0 },
+  { label: 'Perfect', value: 10, color: '#1D9E75' },
+  { label: 'Excellent', value: 9, color: '#185FA5' },
+  { label: 'Amazing', value: 8, color: '#534AB7' },
+  { label: 'Great', value: 7, color: '#D4537E' },
+  { label: 'Good', value: 6, color: '#EF9F27' },
+  { label: 'Mid', value: 5, color: '#D85A30' },
+  { label: 'Bad', value: 0, color: '#E24B4A' },
 ];
 
 export function getRatings() {

@@ -1,12 +1,32 @@
 .card {
-    background: #e4e4e4;
-    padding: 16px;
-    border-radius: 8px;
-    width: 250px;
-    height: auto
+  cursor: pointer;
+  width: 200px;
 }
-.icon {
-    width: 250px;
-    height: auto;
-    border-radius: 25px
+
+.coverWrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.cover {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+}
+
+.title {
+  font-size: 14px;
+  margin: 6px 0 0;
 }
