@@ -6,6 +6,7 @@ import ArtistSearchPage from "./pages/ArtistSearchPage.jsx";
 import CollectionPage from "./pages/CollectionPage.jsx";
 import Home from "./pages/Home.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import ListenedPage from "./pages/ListenedPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFound />,
   },
+  { 
+    path: '/listened/:username', 
+    element: <ListenedPage /> 
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

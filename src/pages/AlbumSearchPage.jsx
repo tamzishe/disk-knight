@@ -5,17 +5,13 @@ import AlbumModal from "../components/AlbumModal/AlbumModal";
 import { useState } from "react";
 import styles from "../css/AlbumSearchPage.module.css";
 import HomeButton from "../components/Buttons/HomeButton";
-import { addToCollection, isInCollection  } from "../func/collection";
-
+import { addToCollection, addToListened, isInCollection, isListened  } from "../func/collection";
+import { handleCollect, handleListen } from '../func/handlers.js';
 function AlbumSearchPage() {
   const [query, setQuery] = useState(null); // what we're searching for
   const [selectedAlbum, setSelectedAlbum] = useState(null); // this is for selecting an album
   const results = fetchAlbums(query?.album, query?.artist, 12); // results from that search
-  const handleCollect = () => {
-    console.log("Collecting:", selectedAlbum); // placeholder for now
-    addToCollection(selectedAlbum);
-    setSelectedAlbum(null);
-  };
+  
   return (
     <div>
       <div className="Header">
@@ -47,9 +43,11 @@ function AlbumSearchPage() {
       {selectedAlbum && (
         <AlbumModal
           album={selectedAlbum}
-          onCollect={handleCollect}
+          onCollect={() => handleCollect(selectedAlbum, () => setSelectedAlbum(null))}
+          onListen={() => handleListen(selectedAlbum, () => setSelectedAlbum(null))}
           onClose={() => setSelectedAlbum(null)}
           isCollected={isInCollection(selectedAlbum.id)}
+          isListened={isListened(selectedAlbum?.id)}
         />
       )}
     </div>

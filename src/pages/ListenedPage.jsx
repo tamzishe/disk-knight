@@ -1,18 +1,19 @@
-import { useState } from "react";
-import { getCollection, removeFromCollection, isListened, isInCollection, getListened, removeFromListened } from "../func/collection";
+import { useState } from 'react';
+import { getListened, removeFromListened, isInCollection, isListened} from '../func/collection.js';
+import AlbumCard from '../components/AlbumCard/AlbumCard';
+import AlbumModal from '../components/AlbumModal/AlbumModal';
+import HomeButton from '../components/Buttons/HomeButton';
+import styles from '../css/ListenedPage.module.css';
 import { handleCollect, handleListen } from '../func/handlers.js';
-import AlbumCard from "../components/AlbumCard/AlbumCard";
-import AlbumModal from "../components/AlbumModal/AlbumModal";
-import HomeButton from "../components/Buttons/HomeButton";
-import styles from "../css/CollectionPage.module.css";
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
-export default function CollectionPage() {
-  const [collection, setCollection] = useState(getCollection());
-  const [selectedAlbum, setSelectedAlbum] = useState(null);
+export default function ListenedPage() {
   const [listened, setListened] = useState(getListened());
+  const [selectedAlbum, setSelectedAlbum] = useState(null);
+
+
+
   const { username } = useParams();
-  
 
   return (
     <div>
@@ -21,10 +22,10 @@ export default function CollectionPage() {
         <h1>Disk Knight</h1>
       </div>
       <HomeButton />
-      <h1>{username}'s Collection</h1>
-      {collection.length === 0 && <p>No albums in your collection yet!</p>}
+      <h1>{username}'s Listened</h1>
+      {listened.length === 0 && <p>Nothing here yet!</p>}
       <div className={styles.albumList}>
-        {collection.map((album) => (
+        {listened.map(album => (
           <AlbumCard
             key={album.id}
             title={album.title}
@@ -36,12 +37,9 @@ export default function CollectionPage() {
       {selectedAlbum && (
         <AlbumModal
           album={selectedAlbum}
-          onCollect={() => handleCollect(selectedAlbum, () => {
-            setCollection(getCollection());
-            setSelectedAlbum(null)
-          })}
+          onCollect={() => handleCollect(selectedAlbum, () => setSelectedAlbum(null))}
           onListen={() => handleListen(selectedAlbum, () => {
-            setListened(getListened()); 
+            setListened(getListened());
             setSelectedAlbum(null);
           })}
           onClose={() => setSelectedAlbum(null)}
