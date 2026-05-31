@@ -35,6 +35,7 @@ function AlbumSearchPage() {
               title={album.title}
               artistName={album.artistName}
               cover={album.cover}
+              albumId={album.id}
               onClick={() => setSelectedAlbum(album)}
             />
           ))}
@@ -46,6 +47,7 @@ function AlbumSearchPage() {
           onCollect={() => handleCollect(selectedAlbum, () => setSelectedAlbum(null))}
           onListen={() => handleListen(selectedAlbum, () => setSelectedAlbum(null))}
           onClose={() => setSelectedAlbum(null)}
+          onRate={() => setSelectedAlbum({...selectedAlbum})}
           isCollected={isInCollection(selectedAlbum.id)}
           isListened={isListened(selectedAlbum?.id)}
         />

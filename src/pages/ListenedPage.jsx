@@ -30,6 +30,7 @@ export default function ListenedPage() {
             key={album.id}
             title={album.title}
             cover={album.cover}
+            albumId={album.id}
             onClick={() => setSelectedAlbum(album)}
           />
         ))}
@@ -42,6 +43,7 @@ export default function ListenedPage() {
             setListened(getListened());
             setSelectedAlbum(null);
           })}
+          onRate={() => setSelectedAlbum({...selectedAlbum})}
           onClose={() => setSelectedAlbum(null)}
           isCollected={isInCollection(selectedAlbum.id)}
           isListened={isListened(selectedAlbum?.id)}

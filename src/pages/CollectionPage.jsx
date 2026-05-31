@@ -29,6 +29,7 @@ export default function CollectionPage() {
             key={album.id}
             title={album.title}
             cover={album.cover}
+            albumId={album.id}
             onClick={() => setSelectedAlbum(album)}
           />
         ))}
@@ -44,6 +45,7 @@ export default function CollectionPage() {
             setListened(getListened()); 
             setSelectedAlbum(null);
           })}
+          onRate={() => setSelectedAlbum({...selectedAlbum})}
           onClose={() => setSelectedAlbum(null)}
           isCollected={isInCollection(selectedAlbum.id)}
           isListened={isListened(selectedAlbum?.id)}
