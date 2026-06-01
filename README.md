@@ -33,6 +33,7 @@ The goal of **DiskKnight** is to provide a fun experience that allows users to e
 - **MusicBrainz API** – Music metadata
 - **Cover Art Archive** – Album artwork
 - **JavaScript (ES6+)**
+- **Supabase** - Database
 - **HTML / CSS**
 
 ## APIs Used (currently chosen)
