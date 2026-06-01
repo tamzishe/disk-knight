@@ -17,6 +17,7 @@ The goal of **DiskKnight** is to provide a fun experience that allows users to e
 - Search interface for albums and artists
 - Ability to save albums to a personal collection
 - Rating system for albums
+- Using Supabase as a database
 
 ### Planned Features
 - Ranking system for albums (using lists)
