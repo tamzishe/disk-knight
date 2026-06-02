@@ -1,20 +1,42 @@
-import { useState } from 'react';
-import { getListened, removeFromListened, isInCollection, isListened} from '../func/collection.js';
+import { useState, useEffect } from 'react';
+// import { getListened, removeFromListened, isInCollection, isListened} from '../func/collection.js';
 import AlbumCard from '../components/AlbumCard/AlbumCard';
 import AlbumModal from '../components/AlbumModal/AlbumModal';
 import HomeButton from '../components/Buttons/HomeButton';
 import styles from '../css/ListenedPage.module.css';
 import { handleCollect, handleListen } from '../func/handlers.js';
+
+import { getListened, isListened } from '../supabase/listened.js';
+import { isInCollection } from '../supabase/collection.js';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function ListenedPage() {
-  const [listened, setListened] = useState(getListened());
+  const { user } = useAuth();
+  const [listened, setListened] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
-
-
-
+  const [collected, setCollected] = useState(false);
+  const [listenedState, setListenedState] = useState(false);
   const { username } = useParams();
 
+  useEffect(() => {
+    async function loadListened() {
+      const data = await getListened(user.id);
+      setListened(data);
+    }
+    loadListened();
+  }, [user.id]);
+
+  const handleSelectAlbum = async (album) => {
+    setSelectedAlbum(album);
+    setCollected(await isInCollection(user.id, album.id));
+    setListenedState(await isListened(user.id, album.id));
+  };
+
+  const refreshListened = async () => {
+    const data = await getListened(user.id);
+    setListened(data);
+  };
   return (
     <div>
       <div className="Header">
@@ -31,22 +53,22 @@ export default function ListenedPage() {
             title={album.title}
             cover={album.cover}
             albumId={album.id}
-            onClick={() => setSelectedAlbum(album)}
+            onClick={() => handleSelectAlbum(album)}
           />
         ))}
       </div>
       {selectedAlbum && (
         <AlbumModal
           album={selectedAlbum}
-          onCollect={() => handleCollect(selectedAlbum, () => setSelectedAlbum(null))}
-          onListen={() => handleListen(selectedAlbum, () => {
-            setListened(getListened());
+          onCollect={async () => await handleCollect(user.id, selectedAlbum, () => setSelectedAlbum(null))}
+          onListen={async () => await handleListen(user.id, selectedAlbum, async() => {
+            await refreshListened();
             setSelectedAlbum(null);
           })}
-          onRate={() => setSelectedAlbum({...selectedAlbum})}
+          onRate={ () => setSelectedAlbum({...selectedAlbum})}
           onClose={() => setSelectedAlbum(null)}
-          isCollected={isInCollection(selectedAlbum.id)}
-          isListened={isListened(selectedAlbum?.id)}
+          isCollected={collected}
+          isListened={listenedState}
         />
       )}
     </div>
