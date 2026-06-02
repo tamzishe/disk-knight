@@ -18,6 +18,7 @@ function AlbumSearchPage() {
 	const results = fetchAlbums(query?.album, query?.artist, 12); // results from that search
 	const [collected, setCollected] = useState(false);
 	const [listened, setListened] = useState(false);
+	const [ratingKey, setRatingKey] = useState(0);
 
 	// when an album is selected, check its status
 	const handleSelectAlbum = async (album) => {
@@ -44,7 +45,7 @@ function AlbumSearchPage() {
 				{results &&
 					results.albums.map((album) => (
 						<AlbumCard
-							key={album.id}
+							key={`${album.id}-${ratingKey}`}
 							title={album.title}
 							artistName={album.artistName}
 							cover={album.cover}
@@ -56,6 +57,7 @@ function AlbumSearchPage() {
 			</div>
 			{selectedAlbum && (
 				<AlbumModal
+				
 					album={selectedAlbum}
 					onCollect={async () =>
 						await handleCollect(user.id, selectedAlbum, () =>
@@ -68,7 +70,10 @@ function AlbumSearchPage() {
 						)
 					}
 					onClose={() => setSelectedAlbum(null)}
-					onRate={() => setSelectedAlbum({ ...selectedAlbum })}
+					onRate={() => {
+						setRatingKey((k) => k + 1);
+						setSelectedAlbum({ ...selectedAlbum });
+					}}
 					isCollected={collected}
 					isListened={listened}
 				/>
