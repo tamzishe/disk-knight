@@ -1,4 +1,5 @@
-import { supabase } from '../../func/supabase';
+import { supabase } from '../func/supabase';
+
 
 export async function getRating(userId, albumId) {
   const { data, error } = await supabase
@@ -12,8 +13,13 @@ export async function getRating(userId, albumId) {
 }
 
 export async function saveRating(userId, albumId, rating) {
-  const { error } = await supabase
+  console.log("saveRating called:", userId, albumId, rating);
+  const { data, error } = await supabase
     .from('ratings')
-    .upsert({ user_id: userId, album_id: albumId, rating });
-  if (error) console.error(error);
+    .upsert(
+      { user_id: userId, album_id: albumId, rating },
+      { onConflict: 'user_id, album_id' }
+    );
+  console.log("saveRating result:", data, error);
+  if (error) console.error("saveRating error:", error);
 }
