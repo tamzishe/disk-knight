@@ -3,16 +3,29 @@ import { supabase } from '../func/supabase';
 export async function getListened(userId) {
   const { data, error } = await supabase
     .from('listened')
-    .select()
+    .select(`
+      *,
+      albums (
+        id,
+        title,
+        artist,
+        cover_url,
+        release_date
+      )
+    `)
     .eq('user_id', userId);
-  if (error) console.error(error);
-  return data?.map(item => ({
-    id: item.albums.id,
-    title: item.albums.title,
-    artist: item.albums.artist,
-    cover: item.albums.cover_url,
-    releaseDate: item.albums.release_date,
-  })) || [];
+  console.log("listened data:", data);
+  console.log("listened error:", error);
+  return data?.map(item => {
+    if (!item.albums) return null;
+    return {
+      id: item.albums.id,
+      title: item.albums.title,
+      artist: item.albums.artist,
+      cover: item.albums.cover_url,
+      releaseDate: item.albums.release_date,
+    };
+  }).filter(Boolean) || [];
 }
 
 export async function addToListened(userId, albumId) {
