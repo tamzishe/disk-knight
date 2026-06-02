@@ -14,15 +14,19 @@ export async function getCollection(userId) {
       )
     `)
     .eq('user_id', userId);
-  if (error) console.error(error);
-  return data?.map(item => ({
-    id: item.albums.id,
-    title: item.albums.title,
-    artist: item.albums.artist,
-    cover: item.albums.cover_url,
-    releaseDate: item.albums.release_date,
-  })) || [];
-}
+  console.log("collection data:", data);
+  console.log("collection error:", error);
+  return data?.map(item => {
+  if (!item.albums) return null; // skip if no album found
+    return {
+      id: item.albums.id,
+      title: item.albums.title,
+      artist: item.albums.artist,
+      cover: item.albums.cover_url,
+      releaseDate: item.albums.release_date,
+    };
+  }).filter(Boolean) || []; 
+  }
 
 export async function addToCollection(userId, albumId) {
   const { error } = await supabase
