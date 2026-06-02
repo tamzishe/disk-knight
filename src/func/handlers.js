@@ -4,12 +4,17 @@ import { addToListened, removeFromListened, isListened } from '../supabase/liste
 import { cacheAlbum } from '../supabase/albums';
 
 export async function handleCollect(userId, album, onDone) {
+  console.log("handleCollect called", userId, album.id);
   const collected = await isInCollection(userId, album.id);
+  console.log("isInCollection:", collected);
   if (collected) {
     await removeFromCollection(userId, album.id);
+    console.log("removed from collection");
   } else {
     await cacheAlbum(album);
+    console.log("cached album");
     await addToCollection(userId, album.id);
+    console.log("added to collection");
   }
   if (onDone) onDone();
 }
