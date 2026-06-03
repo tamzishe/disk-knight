@@ -5,11 +5,13 @@ import AlbumModal from "../components/AlbumModal/AlbumModal";
 import { useState } from "react";
 import styles from "../css/AlbumSearchPage.module.css";
 import HomeButton from "../components/Buttons/HomeButton";
-// import { addToCollection, addToListened, isInCollection, isListened  } from "../func/collection";
+import { useState, useEffect } from "react";
 import { handleCollect, handleListen } from "../func/handlers.js";
 import { isInCollection } from "../supabase/collection.js";
 import { isListened } from "../supabase/listened.js";
 import { useAuth } from "../context/AuthContext";
+import { getRatingsForUser } from '../supabase/ratings.js';
+import { getRatingByLabel } from '../func/ratings.js';
 
 function AlbumSearchPage() {
 	const { user } = useAuth();
@@ -18,7 +20,7 @@ function AlbumSearchPage() {
 	const results = fetchAlbums(query?.album, query?.artist, 12); // results from that search
 	const [collected, setCollected] = useState(false);
 	const [listened, setListened] = useState(false);
-	const [ratingKey, setRatingKey] = useState(0);
+	const [ratings, setRatings] = useState({});
 
 	// when an album is selected, check its status
 	const handleSelectAlbum = async (album) => {
@@ -26,6 +28,18 @@ function AlbumSearchPage() {
 		setCollected(await isInCollection(user.id, album.id));
 		setListened(await isListened(user.id, album.id));
 	};
+	const refreshRatings = async () => {
+		const ratingsMap = await getRatingsForUser(user.id);
+		setRatings(ratingsMap);
+	};
+	useEffect(() => {
+		async function loadRatings() {
+			if (!user) return;
+			const ratingsMap = await getRatingsForUser(user.id);
+			setRatings(ratingsMap);
+		}
+		loadRatings();
+	}, [user.id]);
 	return (
 		<div>
 			<div className="Header">
@@ -45,11 +59,16 @@ function AlbumSearchPage() {
 				{results &&
 					results.albums.map((album) => (
 						<AlbumCard
-							key={`${album.id}-${ratingKey}`}
+							key={album.id}
 							title={album.title}
 							artistName={album.artistName}
 							cover={album.cover}
 							albumId={album.id}
+							rating={
+								ratings[album.id]
+									? getRatingByLabel(ratings[album.id])
+									: null
+							}
 							onClick={() => handleSelectAlbum(album)}
 						/>
 					))}
@@ -57,7 +76,6 @@ function AlbumSearchPage() {
 			</div>
 			{selectedAlbum && (
 				<AlbumModal
-				
 					album={selectedAlbum}
 					onCollect={async () =>
 						await handleCollect(user.id, selectedAlbum, () =>
@@ -71,7 +89,7 @@ function AlbumSearchPage() {
 					}
 					onClose={() => setSelectedAlbum(null)}
 					onRate={() => {
-						setRatingKey((k) => k + 1);
+						refreshRatings();
 						setSelectedAlbum({ ...selectedAlbum });
 					}}
 					isCollected={collected}

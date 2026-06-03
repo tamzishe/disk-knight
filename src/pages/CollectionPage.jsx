@@ -9,6 +9,8 @@ import HomeButton from "../components/Buttons/HomeButton";
 import styles from "../css/CollectionPage.module.css";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { getRatingsForUser } from '../supabase/ratings.js';
+import { getRatingByLabel } from '../func/ratings.js';
 
 export default function CollectionPage() {
 	const { user } = useAuth();
@@ -16,13 +18,16 @@ export default function CollectionPage() {
 	const [selectedAlbum, setSelectedAlbum] = useState(null);
 	const [collected, setCollected] = useState(false);
 	const [listenedState, setListenedState] = useState(false);
-	const [ratingKey, setRatingKey] = useState(0);
+
+	const [ratings, setRatings] = useState({});
 	const { username } = useParams();
 
 	useEffect(() => {
 		async function loadCollection() {
 			const data = await getCollection(user.id);
 			setCollection(data);
+			const ratingsMap = await getRatingsForUser(user.id);
+			setRatings(ratingsMap);
 		}
 		loadCollection();
 	}, [user.id]);
@@ -36,6 +41,10 @@ export default function CollectionPage() {
 	const refreshCollection = async () => {
 		const data = await getCollection(user.id);
 		setCollection(data);
+	};
+	const refreshRatings = async () => {
+		const ratingsMap = await getRatingsForUser(user.id);
+		setRatings(ratingsMap);
 	};
 
 	return (
@@ -52,10 +61,11 @@ export default function CollectionPage() {
 			<div className={styles.albumList}>
 				{collection.map((album) => (
 					<AlbumCard
-						key={`${album.id}-${ratingKey}`}
+						key={album.id}
 						title={album.title}
 						cover={album.cover}
 						albumId={album.id}
+						rating = {ratings[album.id] ? getRatingByLabel(ratings[album.id]) : null}
 						onClick={() => handleSelectAlbum(album)}
 					/>
 				))}
@@ -79,7 +89,7 @@ export default function CollectionPage() {
 						})
 					}
 					onRate={() => {
-						setRatingKey((k) => k + 1);
+						refreshRatings();
 						setSelectedAlbum({ ...selectedAlbum });
 					}}
 					onClose={() => setSelectedAlbum(null)}

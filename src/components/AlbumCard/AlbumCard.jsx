@@ -1,22 +1,6 @@
-import { useState, useEffect } from "react";
-import { getRatingByLabel } from "../../func/ratings.js";
-import { getRating } from "../../supabase/ratings.js";
-import { useAuth } from "../../context/AuthContext.jsx";
 import styles from "./AlbumCard.module.css";
 
-function AlbumCard({ title, cover, onClick, albumId }) {
-	const { user } = useAuth();
-	const [ratingData, setRatingData] = useState(null);
-
-	useEffect(() => {
-		async function loadRating() {
-			if (!albumId || !user) return;
-			const rating = await getRating(user.id, albumId);
-			if (rating) setRatingData(getRatingByLabel(rating));
-		}
-		loadRating();
-	}, [albumId, user]);
-
+function AlbumCard({ title, cover, onClick, albumId, rating }) {
 	return (
 		<div className={styles.card} onClick={onClick}>
 			<div className={styles.coverWrapper}>
