@@ -2,7 +2,7 @@ import fetchAlbums from "../func/fetchAlbums";
 import AlbumCard from "../components/AlbumCard/AlbumCard";
 import AlbumSearchBar from "../components/SearchBar/AlbumSearchBar";
 import AlbumModal from "../components/AlbumModal/AlbumModal";
-import { useState } from "react";
+
 import styles from "../css/AlbumSearchPage.module.css";
 import HomeButton from "../components/Buttons/HomeButton";
 import { useState, useEffect } from "react";

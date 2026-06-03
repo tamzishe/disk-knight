@@ -23,3 +23,12 @@ export async function saveRating(userId, albumId, rating) {
   console.log("saveRating result:", data, error);
   if (error) console.error("saveRating error:", error);
 }
+export async function getRatingsForUser(userId) {
+  const { data, error } = await supabase
+    .from('ratings')
+    .select('album_id, rating')
+    .eq('user_id', userId);
+  if (error) console.error(error);
+  // return as a map for easy lookup: { albumId: label }
+  return Object.fromEntries(data?.map(r => [r.album_id, r.rating]) || []);
+}
