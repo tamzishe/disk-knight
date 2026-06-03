@@ -11,14 +11,14 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getRatingsForUser } from '../supabase/ratings.js';
 import { getRatingByLabel } from '../func/ratings.js';
-
+import SortBar from "../components/SortBar/SortBar.jsx";
 export default function CollectionPage() {
 	const { user } = useAuth();
 	const [collection, setCollection] = useState([]);
 	const [selectedAlbum, setSelectedAlbum] = useState(null);
 	const [collected, setCollected] = useState(false);
 	const [listenedState, setListenedState] = useState(false);
-
+	const [sortBy, setSortBy] = useState('date');
 	const [ratings, setRatings] = useState({});
 	const { username } = useParams();
 
@@ -46,6 +46,17 @@ export default function CollectionPage() {
 		const ratingsMap = await getRatingsForUser(user.id);
 		setRatings(ratingsMap);
 	};
+	const ratingValues = { Perfect: 10, Excellent: 9, Amazing: 8, Great: 7, Good: 6, Mid: 5, Bad: 0 };
+	const sorted = [...collection].sort((a, b) => {
+		if (sortBy === "date")
+			return new Date(b.time_added) - new Date(a.time_added);
+		if (sortBy === "title") return a.title.localeCompare(b.title);
+		if (sortBy === "rating")
+			return (
+				(ratingValues[ratings[b.id]] || -1) -
+				(ratingValues[ratings[a.id]] || -1)
+			);
+	});
 
 	return (
 		<div>
@@ -55,11 +66,12 @@ export default function CollectionPage() {
 			</div>
 			<HomeButton />
 			<h1>{username}'s Collection</h1>
+			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{collection.length === 0 && (
 				<p>No albums in your collection yet!</p>
 			)}
 			<div className={styles.albumList}>
-				{collection.map((album) => (
+				{sorted.map((album) => (
 					<AlbumCard
 						key={album.id}
 						title={album.title}

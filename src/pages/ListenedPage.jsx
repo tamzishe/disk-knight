@@ -8,8 +8,9 @@ import { getListened, isListened } from "../supabase/listened.js";
 import { isInCollection } from "../supabase/collection.js";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getRatingsForUser } from '../supabase/ratings.js';
-import { getRatingByLabel } from '../func/ratings.js';
+import { getRatingsForUser } from "../supabase/ratings.js";
+import { getRatingByLabel } from "../func/ratings.js";
+import SortBar from "../components/SortBar/SortBar.jsx";
 
 export default function ListenedPage() {
 	const { user } = useAuth();
@@ -19,6 +20,7 @@ export default function ListenedPage() {
 	const [listenedState, setListenedState] = useState(false);
 	const [ratings, setRatings] = useState({});
 	const { username } = useParams();
+	const [ sortBy, setSortBy] = useState('date');
 
 	useEffect(() => {
 		async function loadCollection() {
@@ -44,6 +46,18 @@ export default function ListenedPage() {
 		const ratingsMap = await getRatingsForUser(user.id);
 		setRatings(ratingsMap);
 	};
+	
+	const ratingValues = { Perfect: 10, Excellent: 9, Amazing: 8, Great: 7, Good: 6, Mid: 5, Bad: 0 };
+	const sorted = [...listened].sort((a, b) => {
+		if (sortBy === "date")
+			return new Date(b.time_added) - new Date(a.time_added);
+		if (sortBy === "title") return a.title.localeCompare(b.title);
+		if (sortBy === "rating")
+			return (
+				(ratingValues[ratings[b.id]] || -1) -
+				(ratingValues[ratings[a.id]] || -1)
+			);
+	});
 	return (
 		<div>
 			<div className="Header">
@@ -52,18 +66,24 @@ export default function ListenedPage() {
 			</div>
 			<HomeButton />
 			<h1>{username}'s Listened</h1>
+			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{listened.length === 0 && <p>Nothing here yet!</p>}
 			<div className={styles.albumList}>
-				{listened.map((album) => (
-					<AlbumCard
-						key={album.id}
-						title={album.title}
-						cover={album.cover}
-						albumId={album.id}
-						rating={ratings[album.id] ? getRatingByLabel(ratings[album.id]) : null}
-						onClick={() => handleSelectAlbum(album)}
-					/>
-				))}
+				{sorted
+					.map((album) => (
+						<AlbumCard
+							key={album.id}
+							title={album.title}
+							cover={album.cover}
+							albumId={album.id}
+							rating={
+								ratings[album.id]
+									? getRatingByLabel(ratings[album.id])
+									: null
+							}
+							onClick={() => handleSelectAlbum(album)}
+						/>
+					))}
 			</div>
 			{selectedAlbum && (
 				<AlbumModal
