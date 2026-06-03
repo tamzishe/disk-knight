@@ -7,38 +7,57 @@ import CollectionPage from "./pages/CollectionPage.jsx";
 import Home from "./pages/Home.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ListenedPage from "./pages/ListenedPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import { AuthProvider } from "./context/AuthContext";
+import { useState, useEffect } from "react";
+import { supabase } from "./func/supabase";
+import { useAuth } from "./context/AuthContext";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/album-search",
-    element: <AlbumSearchPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/artist-search",
-    element: <ArtistSearchPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/collection/:username',
-    element: <CollectionPage />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-  { 
-    path: '/listened/:username', 
-    element: <ListenedPage /> 
-  }
-]);
+const buildRouter = (session) =>
+  createBrowserRouter([
+    {
+      path: "/",
+      element: session ? <Home /> : <LoginPage />,
+    },
+    {
+      path: "/album-search",
+      element: <AlbumSearchPage />,
+      errorElement: <NotFound />,
+    },
+    // {
+    //   path: "/artist-search",
+    //   element: <ArtistSearchPage />,
+    //   errorElement: <NotFound />,
+    // },
+    {
+      path: "/collection/:username",
+      element: <CollectionPage />,
+    },
+    {
+      path: "/listened/:username",
+      element: <ListenedPage />,
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "*",
+      element: <NotFound />,
+    },
+  ]);
+function App() {
+  const { session, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+
+  return <RouterProvider router={buildRouter(session)} />;
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
 );

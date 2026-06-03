@@ -1,21 +1,21 @@
-import styles from './AlbumCard.module.css';
-import { getRating, getRatingByLabel } from '../../func/ratings.js';
+import styles from "./AlbumCard.module.css";
 
-function AlbumCard({title, artistName, cover, onClick, albumId}){
-    const rating = getRating(albumId);
-    const ratingData = getRatingByLabel(rating);
-    return (
-        <div className={styles.card} onClick={onClick}>
-        <div className={styles.coverWrapper}>
-            <img className={styles.cover} src={cover} alt={title} />
-            {ratingData && (
-                <div className={styles.badge} style={{ backgroundColor: ratingData.color }}>
-                    <span>{ratingData.label}</span>
-                </div>
-            )}
-        </div>
-        <h2 className={styles.title}>{title}</h2>
-        </div>
-    );
+function AlbumCard({ title, cover, onClick, albumId, rating }) {
+	return (
+		<div className={styles.card} onClick={onClick}>
+			<div className={styles.coverWrapper}>
+				<img src={cover} alt={title} className={styles.cover} />
+				{ratingData && (
+					<span
+						className={styles.badge}
+						style={{ background: ratingData.color }}
+					>
+						{ratingData.label}
+					</span>
+				)}
+			</div>
+			<h2 className={styles.title}>{title}</h2>
+		</div>
+	);
 }
 export default AlbumCard;

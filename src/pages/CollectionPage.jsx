@@ -1,56 +1,102 @@
-import { useState } from "react";
-import { getCollection, removeFromCollection, isListened, isInCollection, getListened, removeFromListened } from "../func/collection";
-import { handleCollect, handleListen } from '../func/handlers.js';
+import { useState, useEffect } from "react";
+// import { getCollection, removeFromCollection, isListened, isInCollection, getListened, removeFromListened } from "../func/collection";
+import { handleCollect, handleListen } from "../func/handlers.js";
+import { getCollection, isInCollection } from "../supabase/collection.js";
+import { isListened } from "../supabase/listened.js";
 import AlbumCard from "../components/AlbumCard/AlbumCard";
 import AlbumModal from "../components/AlbumModal/AlbumModal";
 import HomeButton from "../components/Buttons/HomeButton";
 import styles from "../css/CollectionPage.module.css";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { getRatingsForUser } from '../supabase/ratings.js';
+import { getRatingByLabel } from '../func/ratings.js';
 
 export default function CollectionPage() {
-  const [collection, setCollection] = useState(getCollection());
-  const [selectedAlbum, setSelectedAlbum] = useState(null);
-  const [listened, setListened] = useState(getListened());
-  const { username } = useParams();
-  
+	const { user } = useAuth();
+	const [collection, setCollection] = useState([]);
+	const [selectedAlbum, setSelectedAlbum] = useState(null);
+	const [collected, setCollected] = useState(false);
+	const [listenedState, setListenedState] = useState(false);
 
-  return (
-    <div>
-      <div className="Header">
-        <img src="/icon-192x192.png" alt="Logo" className="logo" />
-        <h1>Disk Knight</h1>
-      </div>
-      <HomeButton />
-      <h1>{username}'s Collection</h1>
-      {collection.length === 0 && <p>No albums in your collection yet!</p>}
-      <div className={styles.albumList}>
-        {collection.map((album) => (
-          <AlbumCard
-            key={album.id}
-            title={album.title}
-            cover={album.cover}
-            albumId={album.id}
-            onClick={() => setSelectedAlbum(album)}
-          />
-        ))}
-      </div>
-      {selectedAlbum && (
-        <AlbumModal
-          album={selectedAlbum}
-          onCollect={() => handleCollect(selectedAlbum, () => {
-            setCollection(getCollection());
-            setSelectedAlbum(null)
-          })}
-          onListen={() => handleListen(selectedAlbum, () => {
-            setListened(getListened()); 
-            setSelectedAlbum(null);
-          })}
-          onRate={() => setSelectedAlbum({...selectedAlbum})}
-          onClose={() => setSelectedAlbum(null)}
-          isCollected={isInCollection(selectedAlbum.id)}
-          isListened={isListened(selectedAlbum?.id)}
-        />
-      )}
-    </div>
-  );
+	const [ratings, setRatings] = useState({});
+	const { username } = useParams();
+
+	useEffect(() => {
+		async function loadCollection() {
+			const data = await getCollection(user.id);
+			setCollection(data);
+			const ratingsMap = await getRatingsForUser(user.id);
+			setRatings(ratingsMap);
+		}
+		loadCollection();
+	}, [user.id]);
+
+	const handleSelectAlbum = async (album) => {
+		setSelectedAlbum(album);
+		setCollected(await isInCollection(user.id, album.id));
+		setListenedState(await isListened(user.id, album.id));
+	};
+
+	const refreshCollection = async () => {
+		const data = await getCollection(user.id);
+		setCollection(data);
+	};
+	const refreshRatings = async () => {
+		const ratingsMap = await getRatingsForUser(user.id);
+		setRatings(ratingsMap);
+	};
+
+	return (
+		<div>
+			<div className="Header">
+				<img src="/icon-192x192.png" alt="Logo" className="logo" />
+				<h1>Disk Knight</h1>
+			</div>
+			<HomeButton />
+			<h1>{username}'s Collection</h1>
+			{collection.length === 0 && (
+				<p>No albums in your collection yet!</p>
+			)}
+			<div className={styles.albumList}>
+				{collection.map((album) => (
+					<AlbumCard
+						key={album.id}
+						title={album.title}
+						cover={album.cover}
+						albumId={album.id}
+						rating = {ratings[album.id] ? getRatingByLabel(ratings[album.id]) : null}
+						onClick={() => handleSelectAlbum(album)}
+					/>
+				))}
+			</div>
+			{selectedAlbum && (
+				<AlbumModal
+					album={selectedAlbum}
+					onCollect={async () =>
+						await handleCollect(
+							user.id,
+							selectedAlbum,
+							async () => {
+								await refreshCollection();
+								setSelectedAlbum(null);
+							},
+						)
+					}
+					onListen={async () =>
+						await handleListen(user.id, selectedAlbum, () => {
+							setSelectedAlbum(null);
+						})
+					}
+					onRate={() => {
+						refreshRatings();
+						setSelectedAlbum({ ...selectedAlbum });
+					}}
+					onClose={() => setSelectedAlbum(null)}
+					isCollected={collected}
+					isListened={listenedState}
+				/>
+			)}
+		</div>
+	);
 }
