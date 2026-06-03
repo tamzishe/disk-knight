@@ -5,12 +5,12 @@ function AlbumCard({ title, cover, onClick, albumId, rating }) {
 		<div className={styles.card} onClick={onClick}>
 			<div className={styles.coverWrapper}>
 				<img src={cover} alt={title} className={styles.cover} />
-				{ratingData && (
+				{rating && (
 					<span
 						className={styles.badge}
-						style={{ background: ratingData.color }}
+						style={{ background: rating.color }}
 					>
-						{ratingData.label}
+						{rating.label}
 					</span>
 				)}
 			</div>
