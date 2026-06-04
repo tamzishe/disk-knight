@@ -8,6 +8,7 @@ import Home from "./pages/Home.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ListenedPage from "./pages/ListenedPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import { useState, useEffect } from "react";
 import { supabase } from "./func/supabase";
@@ -36,6 +37,10 @@ const buildRouter = (session) =>
     {
       path: "/listened/:username",
       element: <ListenedPage />,
+    },
+    {
+      path: "/user/:username",
+      element: <ProfilePage />,
     },
     {
       path: "/login",
