@@ -45,11 +45,15 @@ export default function EditForm({ currentProfile, onSave, onClose }) {
 		setMessage("");
 
 		const imageUrl = await uploadImage();
+		console.log("imageUrl:", imageUrl);
 
-		const { error } = await supabase
+		const { data, error } = await supabase
 			.from("users")
 			.update({ description, profile_image: imageUrl })
-			.eq("id", user.id);
+			.eq("id", user.id)
+			.select();
+		console.log("update result:", data, error);
+		console.log("user.id:", user.id);
 
 		if (error) {
 			setMessage(error.message);
