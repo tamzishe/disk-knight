@@ -19,18 +19,29 @@ export default function ListenedPage() {
 	const [collected, setCollected] = useState(false);
 	const [listenedState, setListenedState] = useState(false);
 	const [ratings, setRatings] = useState({});
-	const { username } = useParams();
-	const [ sortBy, setSortBy] = useState('date');
+	const [sortBy, setSortBy] = useState('date');
+	const { username: profileUsername } = useParams();
+	const [currentProfile, setCurrentProfile] = useState(null);
+	
+	useEffect(() => {
+		async function loadProfile() {
+			const currentProfile = await getUserProfile(profileUsername);
+			setCurrentProfile(currentProfile);
+			console.log("currentProfile:", currentProfile);
+		}
+		loadProfile();
+	}, [profileUsername]);
 
 	useEffect(() => {
 		async function loadCollection() {
-			const data = await getListened(user.id);
+			if (!currentProfile) return; // guard
+			const data = await getListened(currentProfile.id);
 			setListened(data);
-			const ratingsMap = await getRatingsForUser(user.id);
+			const ratingsMap = await getRatingsForUser(currentProfile.id);
 			setRatings(ratingsMap);
 		}
 		loadCollection();
-	}, [user.id]);
+	}, [currentProfile]);
 
 	const handleSelectAlbum = async (album) => {
 		setSelectedAlbum(album);
@@ -65,7 +76,7 @@ export default function ListenedPage() {
 				<h1>Disk Knight</h1>
 			</div>
 			<HomeButton />
-			<h1>{username}'s Listened</h1>
+			<h1>{currentProfile?.username || profileUsername}'s Listened</h1>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{listened.length === 0 && <p>Nothing here yet!</p>}
 			<div className={styles.albumList}>
