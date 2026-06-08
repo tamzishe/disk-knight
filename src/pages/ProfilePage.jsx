@@ -56,7 +56,7 @@ export default function ProfilePage() {
 	};
 
 	const isOwnProfile = activeUsername === profileUsername;
-
+	if (!currentProfile) return null; // some sort of loading animation could be put here later
 	return (
 		<div>
 			<h1>Profile</h1>
