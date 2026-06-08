@@ -24,7 +24,7 @@ export async function isFollowing(currentUserId, targetUserId) {
     .select('*')
     .eq('follower_id', currentUserId)
     .eq('following_id', targetUserId)
-    .single();
+    .maybeSingle();
   if (error) return false;
   return !!data;
 }
