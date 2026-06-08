@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getRatingsForUser } from '../supabase/ratings.js';
 import { getRatingByLabel } from '../func/ratings.js';
+import { getUserProfile } from "../supabase/users.js";
 import SortBar from "../components/SortBar/SortBar.jsx";
 export default function CollectionPage() {
 	const { user } = useAuth();
@@ -20,33 +21,46 @@ export default function CollectionPage() {
 	const [listenedState, setListenedState] = useState(false);
 	const [sortBy, setSortBy] = useState('date');
 	const [ratings, setRatings] = useState({});
-	const { username } = useParams();
+	const { username: profileUsername } = useParams();
+	const [currentProfile, setCurrentProfile] = useState(null);
+
+	useEffect(() => {
+		async function loadProfile() {
+			const currentProfile = await getUserProfile(profileUsername);
+			setCurrentProfile(currentProfile);
+			console.log("currentProfile:", currentProfile);
+		}
+		loadProfile();
+	}, [profileUsername]);
 
 	useEffect(() => {
 		async function loadCollection() {
-			const data = await getCollection(user.id);
+			if (!currentProfile) return; // guard
+			const data = await getCollection(currentProfile.id);
 			setCollection(data);
-			const ratingsMap = await getRatingsForUser(user.id);
+			const ratingsMap = await getRatingsForUser(currentProfile.id);
 			setRatings(ratingsMap);
 		}
 		loadCollection();
-	}, [user.id]);
+	}, [currentProfile]);
 
 	const handleSelectAlbum = async (album) => {
 		setSelectedAlbum(album);
-		setCollected(await isInCollection(user.id, album.id));
+		setCollected(await isInCollection(user.id, album.id)); // this is for the current user
 		setListenedState(await isListened(user.id, album.id));
 	};
 
-	const refreshCollection = async () => {
+	const refreshCollection = async () => { // if on own page
 		const data = await getCollection(user.id);
 		setCollection(data);
 	};
-	const refreshRatings = async () => {
+	const refreshRatings = async () => { // if on own page
 		const ratingsMap = await getRatingsForUser(user.id);
 		setRatings(ratingsMap);
 	};
+
 	const ratingValues = { Perfect: 10, Excellent: 9, Amazing: 8, Great: 7, Good: 6, Mid: 5, Bad: 0 };
+	
 	const sorted = [...collection].sort((a, b) => {
 		if (sortBy === "date")
 			return new Date(b.time_added) - new Date(a.time_added);
@@ -65,7 +79,7 @@ export default function CollectionPage() {
 				<h1>Disk Knight</h1>
 			</div>
 			<HomeButton />
-			<h1>{username}'s Collection</h1>
+			<h1>{currentProfile?.username || profileUsername}'s Collection</h1>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{collection.length === 0 && (
 				<p>No albums in your collection yet!</p>

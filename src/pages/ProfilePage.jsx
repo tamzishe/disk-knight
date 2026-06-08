@@ -1,4 +1,5 @@
 import BackButton from "../components/Buttons/BackButton.jsx";
+import { supabase } from "../func/supabase.js";
 import { getUserProfile } from "../supabase/users.js";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -54,6 +55,10 @@ export default function ProfilePage() {
 	const handleEditProfile = () => {
 		setIsEditing(true);
 	};
+	const handleSignOut = async () => {
+		await supabase.auth.signOut();
+		navigate("/login");
+	};
 
 	const isOwnProfile = activeUsername === profileUsername;
 	if (!currentProfile) return null; // some sort of loading animation could be put here later
@@ -96,6 +101,9 @@ export default function ProfilePage() {
 			<button onClick={handleGoToListened}>
 				{currentProfile?.username || profileUsername}'s Listened
 			</button>
+			{isOwnProfile && (
+				<button onClick={handleSignOut}>Sign Out</button>
+			)}
 		</div>
 	);
 }

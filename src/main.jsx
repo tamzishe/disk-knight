@@ -16,54 +16,54 @@ import { supabase } from "./func/supabase";
 import { useAuth } from "./context/AuthContext";
 
 const buildRouter = (session) =>
-  createBrowserRouter([
-    {
-      path: "/",
-      element: session ? <Home /> : <LoginPage />,
-    },
-    {
-      path: "/album-search",
-      element: <AlbumSearchPage />,
-      errorElement: <NotFound />,
-    },
-    {
-      path: "/user-search",
-      element: <UserSearchPage />,
-      errorElement: <NotFound />,
-    },
-    {
-      path: "/collection/:username",
-      element: <CollectionPage />,
-    },
-    {
-      path: "/listened/:username",
-      element: <ListenedPage />,
-    },
-    {
-      path: "/user/:username",
-      element: <ProfilePage />,
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-    {
-      path: "*",
-      element: <NotFound />,
-    },
-  ]);
+	createBrowserRouter([
+		{
+			path: "/",
+			element: session ? <Home /> : <LoginPage />,
+		},
+		{
+			path: "/album-search",
+			element: <AlbumSearchPage />,
+			errorElement: <NotFound />,
+		},
+		{
+			path: "/user-search",
+			element: <UserSearchPage />,
+			errorElement: <NotFound />,
+		},
+		{
+			path: "/collection/:username",
+			element: <CollectionPage />,
+		},
+		{
+			path: "/listened/:username",
+			element: <ListenedPage />,
+		},
+		{
+			path: "/user/:username",
+			element: <ProfilePage />,
+		},
+		{
+			path: "/login",
+			element: <LoginPage />,
+		},
+		{
+			path: "*",
+			element: <NotFound />,
+		},
+	]);
 function App() {
-  const { session, loading } = useAuth();
+	const { session, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+	if (loading) return <div>Loading...</div>;
 
-  return <RouterProvider router={buildRouter(session)} />;
+	return <RouterProvider router={buildRouter(session)} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </React.StrictMode>,
+	<React.StrictMode>
+		<AuthProvider>
+			<App />
+		</AuthProvider>
+	</React.StrictMode>,
 );
