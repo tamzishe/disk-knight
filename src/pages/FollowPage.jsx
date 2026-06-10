@@ -4,6 +4,7 @@ import { getUserProfile } from '../supabase/users.js';
 import { getFollowers, getFollowing } from '../supabase/follows.js';
 import UserCard from '../components/UserCard/UserCard';
 import HomeButton from '../components/Buttons/HomeButton';
+import BackButton from '../components/Buttons/BackButton';
 import styles from '../css/FollowPage.module.css';
 
 export default function FollowPage() {
@@ -33,7 +34,6 @@ export default function FollowPage() {
         <img src="/icon-192x192.png" alt="Logo" className="logo" />
         <h1>Disk Knight</h1>
       </div>
-      <HomeButton />
       <button onClick={() => navigate(`/user/${username}`)}>
         ← Back to {username}'s Profile
       </button>
