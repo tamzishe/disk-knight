@@ -61,7 +61,7 @@ export async function handleListenLater(userId, album, onDone) {
 		await cacheAlbum(album);
 		await addToListenLater(userId, album.id);
 	}
-	if (onDone) onDone(message);
+	if (onDone) onDone(null);
 }
 
 export async function handleWant(userId, album, onDone) {
@@ -72,5 +72,5 @@ export async function handleWant(userId, album, onDone) {
 		await cacheAlbum(album);
 		await addToWant(userId, album.id);
 	}
-	if (onDone) onDone(message);
+	if (onDone) onDone(null);
 }
