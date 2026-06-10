@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { followUser, unfollowUser, isFollowing } from "../supabase/follows.js";
 import EditForm from "../components/EditForm/EditForm.jsx";
+import { getFollowerCount, getFollowingCount } from "../supabase/follows.js";
 
 export default function ProfilePage() {
 	const { user: activeUser, username: activeUsername } = useAuth();

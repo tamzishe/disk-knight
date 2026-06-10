@@ -3,8 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getUserProfile } from '../supabase/users.js';
 import { getFollowers, getFollowing } from '../supabase/follows.js';
 import UserCard from '../components/UserCard/UserCard';
-import HomeButton from '../components/Buttons/HomeButton';
-import BackButton from '../components/Buttons/BackButton';
 import styles from '../css/FollowPage.module.css';
 
 export default function FollowPage() {
