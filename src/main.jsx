@@ -55,12 +55,19 @@ const buildRouter = (session) =>
 			path: "/want",
 			element: <WantPage />,
 		},
-		
+		{
+			path: "/user/:username/followers",
+			element: <FollowPage />,
+		},
+		{
+			path: "/user/:username/following",
+			element: <FollowPage />,
+		},
 		{
 			path: "*",
 			element: <NotFound />,
 		},
-			]);
+	]);
 function App() {
 	const { session, loading } = useAuth();
 
