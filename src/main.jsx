@@ -14,6 +14,7 @@ import ListenLaterPage from "./pages/ListenLaterPage.jsx";
 import WantPage from "./pages/WantPage.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import { useAuth } from "./context/AuthContext";
+import FollowPage from "./pages/FollowPage.jsx";
 
 const buildRouter = (session) =>
 	createBrowserRouter([
@@ -55,12 +56,15 @@ const buildRouter = (session) =>
 			path: "/want",
 			element: <WantPage />,
 		},
-		
+		{
+			path: "/user/:username/:type",
+			element: <FollowPage />,
+		},
 		{
 			path: "*",
 			element: <NotFound />,
 		},
-			]);
+	]);
 function App() {
 	const { session, loading } = useAuth();
 

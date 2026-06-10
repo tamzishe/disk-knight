@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { followUser, unfollowUser, isFollowing } from "../supabase/follows.js";
 import EditForm from "../components/EditForm/EditForm.jsx";
+import { getFollowerCount, getFollowingCount } from "../supabase/follows.js";
 
 export default function ProfilePage() {
 	const { user: activeUser, username: activeUsername } = useAuth();
@@ -15,7 +16,8 @@ export default function ProfilePage() {
 	const [currentProfile, setCurrentProfile] = useState(null);
 	const [isFollowingBool, setIsFollowingBool] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
-
+	const [followerCount, setFollowerCount] = useState(0);
+	const [followingCount, setFollowingCount] = useState(0);
 	useEffect(() => {
 		async function loadProfile() {
 			const currentProfile = await getUserProfile(profileUsername);
@@ -35,6 +37,18 @@ export default function ProfilePage() {
 			setIsFollowingBool(following);
 		}
 		checkFollowing();
+	}, [currentProfile]);
+	useEffect(() => {
+		async function loadCounts() {
+			if (!currentProfile) return;
+			const [followerCount, followingCount] = await Promise.all([
+				getFollowerCount(currentProfile.id),
+				getFollowingCount(currentProfile.id)
+			]);
+			setFollowerCount(followerCount);
+			setFollowingCount(followingCount);
+		}
+		loadCounts();
 	}, [currentProfile]);
 
 	const handleGoToCollection = () => {
@@ -101,9 +115,13 @@ export default function ProfilePage() {
 			<button onClick={handleGoToListened}>
 				{currentProfile?.username || profileUsername}'s Listened
 			</button>
-			{isOwnProfile && (
-				<button onClick={handleSignOut}>Sign Out</button>
-			)}
+			<button onClick={() => navigate(`/user/${profileUsername}/followers`)}>
+				{followerCount} Followers
+			</button>
+			<button onClick={() => navigate(`/user/${profileUsername}/following`)}>
+				{followingCount} Following
+			</button>
+			{isOwnProfile && <button onClick={handleSignOut}>Sign Out</button>}
 		</div>
 	);
 }
