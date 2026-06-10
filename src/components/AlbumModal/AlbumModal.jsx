@@ -8,9 +8,13 @@ function AlbumModal({
 	album,
 	onCollect,
 	onListen,
+	onListenLater,
+	onWant,
 	onClose,
 	isCollected,
 	isListened,
+	isListenLater,
+	isWanted,
 	onRate,
 }) {
 	const { user } = useAuth();
@@ -47,6 +51,12 @@ function AlbumModal({
 				<button onClick={onListen}>
 					{isListened ? "Remove from Listened" : "Mark as Listened"}
 				</button>
+				{!isListened && (<button onClick={onListenLater}>
+					{isListenLater ? "Remove from Listen Later" : "Add to Listen Later"}
+				</button>)}
+				{!isCollected && (<button onClick={onWant}>
+					{isWanted ? "Remove from Want List" : "Add to Want List"}
+				</button>)}
 				{canRate && (
 					<div>
 						<p>Your rating: {currentRating || "Not rated yet"}</p>

@@ -10,9 +10,9 @@ import NotFound from "./pages/NotFound.jsx";
 import ListenedPage from "./pages/ListenedPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import ListenLaterPage from "./pages/ListenLaterPage.jsx";
+import WantPage from "./pages/WantPage.jsx";
 import { AuthProvider } from "./context/AuthContext";
-import { useState, useEffect } from "react";
-import { supabase } from "./func/supabase";
 import { useAuth } from "./context/AuthContext";
 
 const buildRouter = (session) =>
@@ -48,10 +48,19 @@ const buildRouter = (session) =>
 			element: <LoginPage />,
 		},
 		{
+			path: "/listen-later",
+			element: <ListenLaterPage />,
+		},
+		{
+			path: "/want",
+			element: <WantPage />,
+		},
+		
+		{
 			path: "*",
 			element: <NotFound />,
 		},
-	]);
+			]);
 function App() {
 	const { session, loading } = useAuth();
 

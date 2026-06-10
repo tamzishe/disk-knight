@@ -48,7 +48,7 @@ export default function UserSearchPage() {
                     <UserCard
                         key={u.id}
                         name={u.username}
-                        avatar={u.profile_image || '/blank-profile-512x512.png'}
+                        avatar={u.profile_image || '/blank_profile-512x512.jpg'}
                         onClick={() => navigate(`/user/${u.username}`)}
                     />
                 ))}
