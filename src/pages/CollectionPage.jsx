@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// import { getCollection, removeFromCollection, isListened, isInCollection, getListened, removeFromListened } from "../func/collection";
-import { handleCollect, handleListen } from "../func/handlers.js";
 import { getCollection, isInCollection } from "../supabase/collection.js";
 import { isListened } from "../supabase/listened.js";
 import AlbumCard from "../components/AlbumCard/AlbumCard";
@@ -9,20 +7,27 @@ import HomeButton from "../components/Buttons/HomeButton";
 import styles from "../css/CollectionPage.module.css";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getRatingsForUser } from '../supabase/ratings.js';
-import { getRatingByLabel } from '../func/ratings.js';
+import { getRatingsForUser } from "../supabase/ratings.js";
+import { getRatingByLabel } from "../func/ratings.js";
 import { getUserProfile } from "../supabase/users.js";
 import SortBar from "../components/SortBar/SortBar.jsx";
+import { handleListenLater, handleWant, handleCollect, handleListen } from "../func/handlers.js";
+import { isInListenLater } from "../supabase/listenLater.js";
+import { isInWant } from "../supabase/want.js";
+
 export default function CollectionPage() {
 	const { user } = useAuth();
 	const [collection, setCollection] = useState([]);
 	const [selectedAlbum, setSelectedAlbum] = useState(null);
 	const [collected, setCollected] = useState(false);
 	const [listenedState, setListenedState] = useState(false);
-	const [sortBy, setSortBy] = useState('date');
+	const [listenLaterState, setListenLaterState] = useState(false);
+	const [wantedState, setWantedState] = useState(false);
+	const [sortBy, setSortBy] = useState("date");
 	const [ratings, setRatings] = useState({});
 	const { username: profileUsername } = useParams();
 	const [currentProfile, setCurrentProfile] = useState(null);
+	const [statusMessage, setStatusMessage] = useState(null);
 
 	useEffect(() => {
 		async function loadProfile() {
@@ -48,19 +53,31 @@ export default function CollectionPage() {
 		setSelectedAlbum(album);
 		setCollected(await isInCollection(user.id, album.id)); // this is for the current user
 		setListenedState(await isListened(user.id, album.id));
+		setListenLaterState(await isInListenLater(user.id, album.id));
+		setWantedState(await isInWant(user.id, album.id));
 	};
 
-	const refreshCollection = async () => { // if on own page
+	const refreshCollection = async () => {
+		// if on own page
 		const data = await getCollection(user.id);
 		setCollection(data);
 	};
-	const refreshRatings = async () => { // if on own page
+	const refreshRatings = async () => {
+		// if on own page
 		const ratingsMap = await getRatingsForUser(user.id);
 		setRatings(ratingsMap);
 	};
 
-	const ratingValues = { Perfect: 10, Excellent: 9, Amazing: 8, Great: 7, Good: 6, Mid: 5, Bad: 0 };
-	
+	const ratingValues = {
+		Perfect: 10,
+		Excellent: 9,
+		Amazing: 8,
+		Great: 7,
+		Good: 6,
+		Mid: 5,
+		Bad: 0,
+	};
+
 	const sorted = [...collection].sort((a, b) => {
 		if (sortBy === "date")
 			return new Date(b.time_added) - new Date(a.time_added);
@@ -91,7 +108,11 @@ export default function CollectionPage() {
 						title={album.title}
 						cover={album.cover}
 						albumId={album.id}
-						rating = {ratings[album.id] ? getRatingByLabel(ratings[album.id]) : null}
+						rating={
+							ratings[album.id]
+								? getRatingByLabel(ratings[album.id])
+								: null
+						}
 						onClick={() => handleSelectAlbum(album)}
 					/>
 				))}
@@ -103,14 +124,22 @@ export default function CollectionPage() {
 						await handleCollect(
 							user.id,
 							selectedAlbum,
-							async () => {
+							async (message) => {
+								if (message) {
+									setStatusMessage(message);
+									setTimeout(() => setStatusMessage(null), 4000);
+								}
 								await refreshCollection();
 								setSelectedAlbum(null);
 							},
 						)
 					}
 					onListen={async () =>
-						await handleListen(user.id, selectedAlbum, () => {
+						await handleListen(user.id, selectedAlbum, (message) => {
+							if (message) {
+								setStatusMessage(message);
+								setTimeout(() => setStatusMessage(null), 4000);
+							}
 							setSelectedAlbum(null);
 						})
 					}
@@ -118,10 +147,36 @@ export default function CollectionPage() {
 						refreshRatings();
 						setSelectedAlbum({ ...selectedAlbum });
 					}}
+					onListenLater={async () =>
+						await handleListenLater(user.id, selectedAlbum, (message) =>{
+							setSelectedAlbum(null);
+							if (message) {
+								setStatusMessage(message);
+								setTimeout(() => setStatusMessage(null), 4000);
+							}
+						}
+						)
+					}
+					onWant={async () =>
+						await handleWant(user.id, selectedAlbum, (message) =>{
+							setSelectedAlbum(null);
+							if (message) {
+								setStatusMessage(message);
+								setTimeout(() => setStatusMessage(null), 4000);
+							}
+						})
+					}
 					onClose={() => setSelectedAlbum(null)}
 					isCollected={collected}
 					isListened={listenedState}
+					isListenLater={listenLaterState}
+                    isWanted={wantedState}
 				/>
+			)}
+			{statusMessage && (
+				<div onClick={() => setStatusMessage(null)}>
+					{statusMessage}
+				</div>
 			)}
 		</div>
 	);

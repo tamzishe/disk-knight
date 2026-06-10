@@ -11,6 +11,10 @@ import { useAuth } from "../context/AuthContext";
 import { getRatingsForUser } from "../supabase/ratings.js";
 import { getRatingByLabel } from "../func/ratings.js";
 import SortBar from "../components/SortBar/SortBar.jsx";
+import { getUserProfile } from "../supabase/users.js";
+import { isInListenLater } from "../supabase/listenLater.js";
+import { isInWant } from "../supabase/want.js";
+import { handleListenLater, handleWant } from "../func/handlers.js";
 
 export default function ListenedPage() {
 	const { user } = useAuth();
@@ -18,11 +22,14 @@ export default function ListenedPage() {
 	const [selectedAlbum, setSelectedAlbum] = useState(null);
 	const [collected, setCollected] = useState(false);
 	const [listenedState, setListenedState] = useState(false);
+	const [listenLaterState, setListenLaterState] = useState(false);
+	const [wantedState, setWantedState] = useState(false);
 	const [ratings, setRatings] = useState({});
 	const [sortBy, setSortBy] = useState('date');
 	const { username: profileUsername } = useParams();
 	const [currentProfile, setCurrentProfile] = useState(null);
-	
+	const [statusMessage, setStatusMessage] = useState(null);
+
 	useEffect(() => {
 		async function loadProfile() {
 			const currentProfile = await getUserProfile(profileUsername);
@@ -47,6 +54,8 @@ export default function ListenedPage() {
 		setSelectedAlbum(album);
 		setCollected(await isInCollection(user.id, album.id));
 		setListenedState(await isListened(user.id, album.id));
+		setListenLaterState(await isInListenLater(user.id, album.id));
+		setWantedState(await isInWant(user.id, album.id));
 	};
 
 	const refreshListened = async () => {
@@ -100,13 +109,39 @@ export default function ListenedPage() {
 				<AlbumModal
 					album={selectedAlbum}
 					onCollect={async () =>
-						await handleCollect(user.id, selectedAlbum, () =>
-							setSelectedAlbum(null),
-						)
+						await handleCollect(user.id, selectedAlbum, (message) =>{
+							if (message) {
+								setStatusMessage(message);
+								setTimeout(() => setStatusMessage(null), 4000);
+							}
+							setSelectedAlbum(null);
+						})
 					}
 					onListen={async () =>
-						await handleListen(user.id, selectedAlbum, async () => {
+						await handleListen(user.id, selectedAlbum, async (message) => {
+							if (message) {
+								setStatusMessage(message);
+								setTimeout(() => setStatusMessage(null), 4000);
+							}
 							await refreshListened();
+							setSelectedAlbum(null);
+						})
+					}
+					onListenLater={async () =>
+						await handleListenLater(user.id, selectedAlbum, (message) => {
+							if (message) {
+								setStatusMessage(message);
+								setTimeout(() => setStatusMessage(null), 4000);
+							}
+							setSelectedAlbum(null);
+						})
+					}
+					onWant={async () =>
+						await handleWant(user.id, selectedAlbum, (message) =>{
+							if (message) {
+								setStatusMessage(message);
+								setTimeout(() => setStatusMessage(null), 4000);
+							}
 							setSelectedAlbum(null);
 						})
 					}
@@ -117,7 +152,14 @@ export default function ListenedPage() {
 					onClose={() => setSelectedAlbum(null)}
 					isCollected={collected}
 					isListened={listenedState}
+					isListenLater={listenLaterState}
+					isWanted={wantedState}
 				/>
+			)}
+			{statusMessage && (
+				<div onClick={() => setStatusMessage(null)}>
+					{statusMessage}
+				</div>
 			)}
 		</div>
 	);
