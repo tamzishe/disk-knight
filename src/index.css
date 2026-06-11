@@ -9,3 +9,26 @@ body {
   background-color: #2f2f2f;
   color: #ffffff;
 }
+.bottomButtons {
+  display: flex;
+  gap: 12px;
+  padding: 12px 20px;
+}
+
+.bottomBtn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1.5px solid #3b967e;
+  background: #3b967e22;
+  color: #6ac4ac;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bottomBtn:hover {
+  background: #3b967e44;
+}
