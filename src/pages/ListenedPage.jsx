@@ -155,7 +155,7 @@ export default function ListenedPage() {
 				/>
 			)}
 			{statusMessage && (
-				<div className="toast" className="toast" onClick={() => setStatusMessage(null)}>
+				<div className="toast" onClick={() => setStatusMessage(null)}>
 					{statusMessage}
 				</div>
 			)}
