@@ -15,6 +15,7 @@ import { getUserProfile } from "../supabase/users.js";
 import { isInListenLater } from "../supabase/listenLater.js";
 import { isInWant } from "../supabase/want.js";
 import { handleListenLater, handleWant } from "../func/handlers.js";
+import BackButton from "../components/Buttons/BackButton";
 import Header from '../components/Header/Header';
 
 export default function ListenedPage() {
@@ -81,8 +82,8 @@ export default function ListenedPage() {
 	});
 	return (
 		<div className="page">
-			<Header title={`${currentProfile?.username || profileUsername}'s Listened`} />
-			<HomeButton />
+			<Header />
+			<BackButton />
 			<h1>{currentProfile?.username || profileUsername}'s Listened</h1>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{listened.length === 0 && <p>Nothing here yet!</p>}

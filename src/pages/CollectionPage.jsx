@@ -15,6 +15,7 @@ import { handleListenLater, handleWant, handleCollect, handleListen } from "../f
 import { isInListenLater } from "../supabase/listenLater.js";
 import { isInWant } from "../supabase/want.js";
 import Header from '../components/Header/Header';
+import BackButton from "../components/Buttons/BackButton";
 
 export default function CollectionPage() {
 	const { user } = useAuth();
@@ -93,9 +94,9 @@ export default function CollectionPage() {
 	if (!currentProfile) return null;
 	return (
 		<div className="page">
-			<Header title={`${currentProfile?.username || profileUsername}'s Collection`} />
-			<HomeButton />
-			<h1>{currentProfile?.username || profileUsername}'s Collection</h1>
+			<Header />
+			<BackButton />
+			<h2>{currentProfile?.username || profileUsername}'s Collection</h2>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{collection.length === 0 && (
 				<p>No albums in your collection yet!</p>

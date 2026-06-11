@@ -13,6 +13,7 @@ import { getRatingByLabel } from "../func/ratings.js";
 import SortBar from "../components/SortBar/SortBar.jsx";
 import { isInListenLater } from "../supabase/listenLater.js";
 import Header from '../components/Header/Header';
+import BackButton from "../components/Buttons/BackButton";
 
 export default function WantPage() {
     const { user } = useAuth();
@@ -61,9 +62,9 @@ export default function WantPage() {
 
     return (
         <div className="page">
-            <Header title="Want" />
-            <HomeButton />
-            <h1>Want</h1>
+            <Header />
+            <BackButton />
+            <h2>Want</h2>
             <SortBar sortBy={sortBy} setSortBy={setSortBy} />
             {want.length === 0 && <p>Nothing here yet!</p>}
             <div className="albumList">

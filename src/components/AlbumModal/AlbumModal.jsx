@@ -43,42 +43,90 @@ function AlbumModal({
 					src={album.cover}
 					alt={album.title}
 				/>
-				<h2>{album.title}</h2>
-				<p>{album.artist}</p>
-				<button onClick={onCollect}>
-					{isCollected ? "Remove from Collection" : "Collect"}
-				</button>
-				<button onClick={onListen}>
-					{isListened ? "Remove from Listened" : "Mark as Listened"}
-				</button>
-				{!isListened && (<button onClick={onListenLater}>
-					{isListenLater ? "Remove from Listen Later" : "Add to Listen Later"}
-				</button>)}
-				{!isCollected && (<button onClick={onWant}>
-					{isWanted ? "Remove from Want List" : "Add to Want List"}
-				</button>)}
-				{canRate && (
-					<div>
-						<p>Your rating: {currentRating || "Not rated yet"}</p>
-						<div className={styles.ratings}>
-							{getRatings().map((r) => (
-								<button
-									key={r.label}
-									className={
-										currentRating === r.label
-											? styles.ratingSelected
-											: styles.ratingButton
-									}
-									onClick={() => handleRate(r.label)}
-								>
-									{r.label}
-								</button>
-							))}
+				<h2 className={styles.title}>{album.title}</h2>
+				<p className={styles.artist}>{album.artist}</p>
+				<div className={styles.actions}>
+					<button
+						className={
+							isCollected
+								? styles.actionBtnDestructive
+								: styles.actionBtn
+						}
+						onClick={onCollect}
+					>
+						{isCollected ? "Remove from Collection" : "Collect"}
+					</button>
+					<button
+						className={
+							isListened
+								? styles.actionBtnDestructive
+								: styles.actionBtn
+						}
+						onClick={onListen}
+					>
+						{isListened
+							? "Remove from Listened"
+							: "Mark as Listened"}
+					</button>
+					{!isListened && (
+						<button
+							className={
+								isListenLater
+									? styles.actionBtnDestructive
+									: styles.actionBtn
+							}
+							onClick={onListenLater}
+						>
+							{isListenLater
+								? "Remove from Listen Later"
+								: "Add to Listen Later"}
+						</button>
+					)}
+					{!isCollected && (
+						<button
+							className={
+								isWanted
+									? styles.actionBtnDestructive
+									: styles.actionBtn
+							}
+							onClick={onWant}
+						>
+							{isWanted
+								? "Remove from Want List"
+								: "Add to Want List"}
+						</button>
+					)}
+					{canRate && (
+						<div className={styles.ratingSection}>
+							<p className={styles.ratingLabel}>
+								{currentRating
+									? `Rated: ${currentRating}`
+									: "Not rated yet"}
+							</p>
+							<div className={styles.ratings}>
+								{getRatings().map((r) => (
+									<button
+										key={r.label}
+										className={
+											currentRating === r.label
+												? styles.ratingSelected
+												: styles.ratingButton
+										}
+										onClick={() => handleRate(r.label)}
+									>
+										{r.label}
+									</button>
+								))}
+							</div>
 						</div>
-					</div>
-				)}
-				<button disabled>Add to List</button>
-				<button onClick={onClose}>Cancel</button>
+					)}
+					<button className={styles.actionBtnDisabled} disabled>
+						Add to List
+					</button>
+					<button className={styles.cancelBtn} onClick={onClose}>
+						Cancel
+					</button>
+				</div>
 			</div>
 		</div>
 	);

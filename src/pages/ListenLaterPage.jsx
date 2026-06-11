@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AlbumCard from "../components/AlbumCard/AlbumCard";
 import AlbumModal from "../components/AlbumModal/AlbumModal";
 import HomeButton from "../components/Buttons/HomeButton";
+import BackButton from "../components/Buttons/BackButton";
 import styles from "../css/ListenLaterPage.module.css";
 import {
 	handleCollect,
@@ -81,8 +82,8 @@ export default function ListenLaterPage() {
 
 	return (
 		<div className="page">
-			<Header title="Listen Later" />
-			<HomeButton />
+			<Header />
+			<BackButton />
 			<h1>Listen Later</h1>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{listenLater.length === 0 && <p>Nothing here yet!</p>}
