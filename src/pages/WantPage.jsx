@@ -12,6 +12,7 @@ import { getRatingsForUser } from "../supabase/ratings.js";
 import { getRatingByLabel } from "../func/ratings.js";
 import SortBar from "../components/SortBar/SortBar.jsx";
 import { isInListenLater } from "../supabase/listenLater.js";
+import Header from '../components/Header/Header';
 
 export default function WantPage() {
     const { user } = useAuth();
@@ -59,16 +60,13 @@ export default function WantPage() {
     });
 
     return (
-        <div>
-            <div className="Header">
-                <img src="/icon-192x192.png" alt="Logo" className="logo" />
-                <h1>Disk Knight</h1>
-            </div>
+        <div className="page">
+            <Header title="Want" />
             <HomeButton />
             <h1>Want</h1>
             <SortBar sortBy={sortBy} setSortBy={setSortBy} />
             {want.length === 0 && <p>Nothing here yet!</p>}
-            <div className={styles.albumList}>
+            <div className="albumList">
                 {sorted.map((album) => (
                     <AlbumCard
                         key={album.id}
@@ -132,7 +130,7 @@ export default function WantPage() {
                 />
             )}
             {statusMessage && (
-				<div onClick={() => setStatusMessage(null)}>
+				<div className="toast" onClick={() => setStatusMessage(null)}>
 					{statusMessage}
 				</div>
 			)}

@@ -1,0 +1,150 @@
+.signOutBtn {
+  display: block;
+  margin: 24px 20px 0;
+  padding: 14px 28px;
+  width: auto;
+  border-radius: 12px;
+  border: 1.5px solid #fc0f0f;
+  background: #a12d2d22;
+  color: #e75d5d;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.signOutBtn:hover {
+  background: #db0c0cb9;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 4px solid #6ac4ac;
+}
+
+
+.profileSection {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 20px;
+}
+
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.username {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.profileActions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.actionBtn {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1.5px solid #6ac4ac;
+    background: transparent;
+    color: #6ac4ac;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.actionBtn:hover {
+    background: #6ac4ac22;
+}
+
+.actionBtnActive {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1.5px solid #72a698;
+    background: #72a69822;
+    color: #72a698;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #3b967e;
+    margin: 0 20px;
+}
+
+.followRow {
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+.followBtn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1.5px solid #3b967e;
+    background: #3b967e22;
+    color: #6ac4ac;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.followBtn:hover {
+    background: #3b967e44;
+}
+
+.description {
+    color: #72a698;
+    font-size: 14px;
+    padding: 0 20px 16px;
+    line-height: 1.6;
+}
+
+.listButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.listBtn {
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1.5px solid #3b967e;
+    background: #3b967e11;
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+}
+
+.listBtn:hover {
+    background: #3b967e33;
+}

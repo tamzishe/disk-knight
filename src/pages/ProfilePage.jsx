@@ -6,7 +6,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { followUser, unfollowUser, isFollowing } from "../supabase/follows.js";
 import EditForm from "../components/EditForm/EditForm.jsx";
+import Header from '../components/Header/Header';
 import { getFollowerCount, getFollowingCount } from "../supabase/follows.js";
+import styles from "../css/ProfilePage.module.css";
 
 export default function ProfilePage() {
 	const { user: activeUser, username: activeUsername } = useAuth();
@@ -38,6 +40,7 @@ export default function ProfilePage() {
 		}
 		checkFollowing();
 	}, [currentProfile]);
+
 	useEffect(() => {
 		async function loadCounts() {
 			if (!currentProfile) return;
@@ -77,51 +80,77 @@ export default function ProfilePage() {
 	const isOwnProfile = activeUsername === profileUsername;
 	if (!currentProfile) return null; // some sort of loading animation could be put here later
 	return (
-		<div>
-			<h1>Profile</h1>
-			<img
-				src={
-					currentProfile?.profile_image ||
-					"/blank_profile-512x512.jpg"
-				}
-				alt="Profile Picture"
-			/>
-			<h2>{currentProfile?.username || profileUsername}</h2>
-			<p>{currentProfile?.description || "No description provided."}</p>
-			<BackButton />
-			<p>This is where user profile information will be displayed.</p>
-			{isOwnProfile && (
-				<button onClick={handleEditProfile}>Edit Profile</button>
-			)}
-			{isEditing && (
-				<EditForm
-					currentProfile={currentProfile}
-					onSave={(updated) => {
-						setCurrentProfile({ ...currentProfile, ...updated });
-						setIsEditing(false);
-					}}
-					onClose={() => setIsEditing(false)}
-				/>
-			)}
-			{!isOwnProfile && !isFollowingBool && (
-				<button onClick={handleFollow}>Follow</button>
-			)}
-			{!isOwnProfile && isFollowingBool && (
-				<button onClick={handleUnfollow}>Unfollow</button>
-			)}
-			<button onClick={handleGoToCollection}>
-				{currentProfile?.username || profileUsername}'s Collection
-			</button>
-			<button onClick={handleGoToListened}>
-				{currentProfile?.username || profileUsername}'s Listened
-			</button>
-			<button onClick={() => navigate(`/user/${profileUsername}/followers`)}>
-				{followerCount} Followers
-			</button>
-			<button onClick={() => navigate(`/user/${profileUsername}/following`)}>
-				{followingCount} Following
-			</button>
-			{isOwnProfile && <button onClick={handleSignOut}>Sign Out</button>}
-		</div>
-	);
+    <div className="page">
+        <Header />
+        
+        <div className={styles.profileSection}>
+            <img
+                className={styles.avatar}
+                src={currentProfile?.profile_image || "/blank_profile-512x512.jpg"}
+                alt="Profile Picture"
+            />
+            <div className={styles.profileInfo}>
+                <h2 className={styles.username}>{currentProfile?.username || profileUsername}</h2>
+                <div className={styles.profileActions}>
+                    {isOwnProfile && (
+                        <button className={styles.actionBtn} onClick={handleEditProfile}>
+                            Edit Profile
+                        </button>
+                    )}
+                    {!isOwnProfile && !isFollowingBool && (
+                        <button className={styles.actionBtn} onClick={handleFollow}>
+                            Follow
+                        </button>
+                    )}
+                    {!isOwnProfile && isFollowingBool && (
+                        <button className={styles.actionBtnActive} onClick={handleUnfollow}>
+                            Unfollow
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+
+        <hr className={styles.divider} />
+
+        <div className={styles.followRow}>
+            <button className={styles.followBtn} onClick={() => navigate(`/user/${profileUsername}/following`)}>
+                {followingCount} Following
+            </button>
+            <button className={styles.followBtn} onClick={() => navigate(`/user/${profileUsername}/followers`)}>
+                {followerCount} Followers
+            </button>
+        </div>
+
+        {currentProfile?.description && (
+            <p className={styles.description}>{currentProfile.description}</p>
+        )}
+
+        <div className={styles.listButtons}>
+            <button className={styles.listBtn} onClick={handleGoToCollection}>
+                {profileUsername}'s Collection
+            </button>
+            <button className={styles.listBtn} onClick={handleGoToListened}>
+                {profileUsername}'s Listened
+            </button>
+        </div>
+
+        {isOwnProfile && (
+            <button className={styles.signOutBtn} onClick={handleSignOut}>
+                Sign Out
+            </button>
+        )}
+
+        {isEditing && (
+            <EditForm
+                currentProfile={currentProfile}
+                onSave={(updated) => {
+                    setCurrentProfile({ ...currentProfile, ...updated });
+                    setIsEditing(false);
+                }}
+                onClose={() => setIsEditing(false)}
+            />
+        )}
+    </div>
+);
 }

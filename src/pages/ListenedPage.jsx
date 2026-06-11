@@ -15,6 +15,7 @@ import { getUserProfile } from "../supabase/users.js";
 import { isInListenLater } from "../supabase/listenLater.js";
 import { isInWant } from "../supabase/want.js";
 import { handleListenLater, handleWant } from "../func/handlers.js";
+import Header from '../components/Header/Header';
 
 export default function ListenedPage() {
 	const { user } = useAuth();
@@ -79,16 +80,13 @@ export default function ListenedPage() {
 			);
 	});
 	return (
-		<div>
-			<div className="Header">
-				<img src="/icon-192x192.png" alt="Logo" className="logo" />
-				<h1>Disk Knight</h1>
-			</div>
+		<div className="page">
+			<Header title={`${currentProfile?.username || profileUsername}'s Listened`} />
 			<HomeButton />
 			<h1>{currentProfile?.username || profileUsername}'s Listened</h1>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{listened.length === 0 && <p>Nothing here yet!</p>}
-			<div className={styles.albumList}>
+			<div className={"albumList"}>
 				{sorted
 					.map((album) => (
 						<AlbumCard
@@ -157,7 +155,7 @@ export default function ListenedPage() {
 				/>
 			)}
 			{statusMessage && (
-				<div onClick={() => setStatusMessage(null)}>
+				<div className="toast" className="toast" onClick={() => setStatusMessage(null)}>
 					{statusMessage}
 				</div>
 			)}

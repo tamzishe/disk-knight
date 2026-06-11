@@ -1,24 +1,29 @@
+import styles from './SortBar.module.css';
+
 export default function SortBar({ sortBy, setSortBy }) {
   return (
-    <div>
-      <button 
-        onClick={() => setSortBy('date')}
-        style={{ fontWeight: sortBy === 'date' ? 'bold' : 'normal' }}
-      >
-        Date Added
-      </button>
-      <button 
-        onClick={() => setSortBy('title')}
-        style={{ fontWeight: sortBy === 'title' ? 'bold' : 'normal' }}
-      >
-        Title
-      </button>
-      <button 
-        onClick={() => setSortBy('rating')}
-        style={{ fontWeight: sortBy === 'rating' ? 'bold' : 'normal' }}
-      >
-        Rating
-      </button>
+    <div className={styles.container}>
+      <span className={styles.label}>Sort By</span>
+      <div className={styles.pills}>
+        <button
+          className={sortBy === 'date' ? styles.pillActive : styles.pill}
+          onClick={() => setSortBy('date')}
+        >
+          Date
+        </button>
+        <button
+          className={sortBy === 'title' ? styles.pillActive : styles.pill}
+          onClick={() => setSortBy('title')}
+        >
+          Title
+        </button>
+        <button
+          className={sortBy === 'rating' ? styles.pillActive : styles.pill}
+          onClick={() => setSortBy('rating')}
+        >
+          Rating
+        </button>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,107 @@
-.albumList {
+.searchSection {
+  padding: 16px 20px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inputRow {
+  display: flex;
+  gap: 12px;
+}
+
+.inputWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: #72a698;
+  font-size: 16px;
+}
+
+.required {
+  position: absolute;
+  left: 32px;
+  color: #6ac4ac;
+  font-size: 16px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 12px 12px 48px;
+  border-radius: 12px;
+  border: 1.5px solid #3b967e;
+  background: #3b967e11;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.input::placeholder {
+  color: #72a698;
+}
+
+.input:focus {
+  border-color: #6ac4ac;
+}
+
+.inputSimple {
+  width: 100%;
+  padding: 12px 12px 12px 36px;
+  border-radius: 12px;
+  border: 1.5px solid #3b967e;
+  background: #3b967e11;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.inputSimple::placeholder {
+  color: #72a698;
+}
+
+.inputSimple:focus {
+  border-color: #6ac4ac;
+}
+
+.enterBtn {
+  align-self: center;
+  padding: 10px 28px;
+  border-radius: 999px;
+  border: 1.5px solid #6ac4ac;
+  background: #6ac4ac22;
+  color: #6ac4ac;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.enterBtn:hover {
+  background: #6ac4ac44;
+}
+
+.empty {
+  color: #72a698;
+  font-size: 14px;
+  text-align: center;
+  padding: 32px 0;
+}
+
+.albumList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 0 20px 32px;
+  align-items: start;
 }

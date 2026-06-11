@@ -1,6 +1,9 @@
 .card {
   cursor: pointer;
-  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 .coverWrapper {
@@ -10,9 +13,10 @@
 }
 
 .cover {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 10px;
 }
 
 .badge {
@@ -27,6 +31,34 @@
 }
 
 .title {
-  font-size: 14px;
-  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.smallCard {
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.smallCoverWrapper {
+  position: relative;
+  width: 160px;
+  height: 160px;
+}
+
+.smallCover {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
 }

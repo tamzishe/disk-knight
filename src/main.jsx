@@ -1,9 +1,9 @@
 import React from "react";
+import './index.css';
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AlbumSearchPage from "./pages/AlbumSearchPage.jsx";
 import UserSearchPage from "./pages/UserSearchPage.jsx";
-import ArtistSearchPage from "./pages/ArtistSearchPage.jsx";
 import CollectionPage from "./pages/CollectionPage.jsx";
 import Home from "./pages/Home.jsx";
 import NotFound from "./pages/NotFound.jsx";

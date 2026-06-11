@@ -1,0 +1,101 @@
+.card {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo {
+    width: 64px;
+    height: 64px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #6ac4ac;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #72a698;
+    margin: 0;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1.5px solid #3b967e;
+    background: #3b967e11;
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+    box-sizing: border-box;
+}
+
+.input::placeholder {
+    color: #72a698;
+}
+
+.input:focus {
+    border-color: #6ac4ac;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #6ac4ac;
+    color: #2f2f2f;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 4px;
+}
+
+.submitBtn:hover {
+    opacity: 0.85;
+}
+
+.submitBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.message {
+    font-size: 13px;
+    color: #6ac4ac;
+    text-align: center;
+    margin: 0;
+}
+
+.toggleBtn {
+    background: none;
+    border: none;
+    color: #72a698;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.toggleBtn:hover {
+    color: #6ac4ac;
+}

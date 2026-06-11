@@ -1,0 +1,65 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #3b967e;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  min-width: 36px;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+}
+
+.logoText {
+  font-size: 22px;
+  font-weight: 700;
+  color: #6ac4ac;
+  letter-spacing: -0.5px;
+}
+
+.back {
+  background: none;
+  border: none;
+  color: #6ac4ac;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  flex: 1;
+}
+
+.right {
+  min-width: 36px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #6ac4ac;
+}

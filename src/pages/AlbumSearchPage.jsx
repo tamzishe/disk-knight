@@ -14,6 +14,7 @@ import { getRatingsForUser } from '../supabase/ratings.js';
 import { getRatingByLabel } from '../func/ratings.js';
 import { isInListenLater } from "../supabase/listenLater.js";
 import { isInWant } from "../supabase/want.js";
+import Header from '../components/Header/Header';
 
 function AlbumSearchPage() {
 	const { user } = useAuth();
@@ -35,6 +36,10 @@ function AlbumSearchPage() {
 		setListenLaterState(await isInListenLater(user.id, album.id));
 		setWantedState(await isInWant(user.id, album.id));
 	};
+	const handleSearch = () => {
+		if (!query?.album) return;
+		setQuery(q => ({ ...q })); // trigger fetchAlbums
+	};
 
 	const refreshRatings = async () => {
 		const ratingsMap = await getRatingsForUser(user.id);
@@ -51,96 +56,94 @@ function AlbumSearchPage() {
 	}, [user.id]);
 
 	return (
-		<div>
-			<div className="Header">
-				<img src="/icon-192x192.png" alt="Logo" className="logo" />
-				<h1>Disk Knight</h1>
-			</div>
-			<h1>Welcome to Disk Knight</h1>
-			<HomeButton />
-			<AlbumSearchBar
-				onSearch={(album, artist) => setQuery({ album, artist })}
-			/>
-			<div className={styles.albumList}>
-				{!query?.album && <p>Search for an album!</p>}
-				{/* No Query */}
-				{query?.album && !results && <p>Loading...</p>}
-				{/* No album received yet */}
-				{results &&
-					results.albums.map((album) => (
-						<AlbumCard
-							key={album.id}
-							title={album.title}
-							artistName={album.artistName}
-							cover={album.cover}
-							albumId={album.id}
-							rating={
-								ratings[album.id]
-									? getRatingByLabel(ratings[album.id])
-									: null
-							}
-							onClick={() => handleSelectAlbum(album)}
-						/>
-					))}
-				{/* received the albums! */}
-			</div>
-			{selectedAlbum && (
-				<AlbumModal
-					album={selectedAlbum}
-					onCollect={async () =>
-						await handleCollect(user.id, selectedAlbum, (message) =>{
-							if (message) {
-								setStatusMessage(message);
-								setTimeout(() => setStatusMessage(null), 4000);
-							}
-							setSelectedAlbum(null);
-						})
-					}
-					onListen={async () =>
-						await handleListen(user.id, selectedAlbum, (message) =>{
-							if (message) {
-								setStatusMessage(message);
-								setTimeout(() => setStatusMessage(null), 4000);
-							}
-							setSelectedAlbum(null);
-						})
-					}
-					onListenLater={async () =>
-						await handleListenLater(user.id, selectedAlbum, (message) =>{
-							if (message) {
-								setStatusMessage(message);
-								setTimeout(() => setStatusMessage(null), 4000);
-							}
-							setSelectedAlbum(null);
-						})
-					}
-					onWant={async () =>
-						await handleWant(user.id, selectedAlbum, (message) =>{
-							if (message) {
-								setStatusMessage(message);
-								setTimeout(() => setStatusMessage(null), 4000);
-							}
-							setSelectedAlbum(null);
-						})
-					}
-					onClose={() => setSelectedAlbum(null)}
-					onRate={() => {
-						refreshRatings();
-						setSelectedAlbum({ ...selectedAlbum });
-					}}
-					isCollected={collected}
-					isListened={listened}
-					isListenLater={listenLaterState}
-					isWanted={wantedState}
-				/>
-			)}
-			{statusMessage && (
-				<div onClick={() => setStatusMessage(null)}>
-					{statusMessage}
-				</div>
-			)}
-		</div>
-	);
-}
+    <div className="page">
+        <Header title="Search Albums" />
+        <div className={styles.searchSection}>
+            <div className={styles.inputRow}>
+                <div className={styles.inputWrapper}>
+                    <span className={styles.searchIcon}>🔍</span>
+                    <span className={styles.required}>*</span>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        placeholder="Album..."
+                        value={query?.album || ''}
+                        onChange={(e) => setQuery(q => ({ ...q, album: e.target.value }))}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+                    />
+                </div>
+                <div className={styles.inputWrapper}>
+                    <span className={styles.searchIcon}>🔍</span>
+                    <input
+                        className={styles.inputSimple}
+                        type="text"
+                        placeholder="Artist..."
+                        value={query?.artist || ''}
+                        onChange={(e) => setQuery(q => ({ ...q, artist: e.target.value }))}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+                    />
+                </div>
+            </div>
+            <button className={styles.enterBtn} onClick={handleSearch}>
+                Enter
+            </button>
+        </div>
+
+        {!query?.album && <p className={styles.empty}>Search for an album!</p>}
+        {query?.album && !results && <p className={styles.empty}>Loading...</p>}
+        {results && (
+            <div className={styles.albumList}>
+                {results.albums.map((album) => (
+                    <AlbumCard
+                        key={album.id}
+                        title={album.title}
+                        cover={album.cover}
+                        albumId={album.id}
+                        rating={ratings[album.id] ? getRatingByLabel(ratings[album.id]) : null}
+                        onClick={() => handleSelectAlbum(album)}
+                    />
+                ))}
+            </div>
+        )}
+        {selectedAlbum && (
+            <AlbumModal
+                album={selectedAlbum}
+                onCollect={async () =>
+                    await handleCollect(user.id, selectedAlbum, (message) => {
+                        if (message) { setStatusMessage(message); setTimeout(() => setStatusMessage(null), 4000); }
+                        setSelectedAlbum(null);
+                    })
+                }
+                onListen={async () =>
+                    await handleListen(user.id, selectedAlbum, (message) => {
+                        if (message) { setStatusMessage(message); setTimeout(() => setStatusMessage(null), 4000); }
+                        setSelectedAlbum(null);
+                    })
+                }
+                onListenLater={async () =>
+                    await handleListenLater(user.id, selectedAlbum, (message) => {
+                        if (message) { setStatusMessage(message); setTimeout(() => setStatusMessage(null), 4000); }
+                        setSelectedAlbum(null);
+                    })
+                }
+                onWant={async () =>
+                    await handleWant(user.id, selectedAlbum, (message) => {
+                        if (message) { setStatusMessage(message); setTimeout(() => setStatusMessage(null), 4000); }
+                        setSelectedAlbum(null);
+                    })
+                }
+                onClose={() => setSelectedAlbum(null)}
+                onRate={() => { refreshRatings(); setSelectedAlbum({ ...selectedAlbum }); }}
+                isCollected={collected}
+                isListened={listened}
+                isListenLater={listenLaterState}
+                isWanted={wantedState}
+            />
+        )}
+        {statusMessage && (
+            <div className="toast" onClick={() => setStatusMessage(null)}>{statusMessage}</div>
+        )}
+    </div>
+);}
 
 export default AlbumSearchPage;

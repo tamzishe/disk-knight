@@ -18,7 +18,7 @@ function ArtistSearchPage() {
       <h1>Search Artists</h1>
       <HomeButton/>
       <ArtistSearchBar onSearch={(artist) => setQuery(artist)} />
-      <div className={styles.albumList}>
+      <div className={"albumList"}>
         {!query && <p>Search for an artist!</p>}
         {query && !results && <p>Loading...</p>}
         {results && results.artists.map((artist) => (
