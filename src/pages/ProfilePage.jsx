@@ -91,7 +91,7 @@ export default function ProfilePage() {
 			<BackButton />
 			<p>This is where user profile information will be displayed.</p>
 			{isOwnProfile && (
-				<button onClick={handleEditProfile}>Edit Profile</button>
+				<button className="bottomBtn" onClick={handleEditProfile}>Edit Profile</button>
 			)}
 			{isEditing && (
 				<EditForm
@@ -104,24 +104,24 @@ export default function ProfilePage() {
 				/>
 			)}
 			{!isOwnProfile && !isFollowingBool && (
-				<button onClick={handleFollow}>Follow</button>
+				<button className="bottomBtn" onClick={handleFollow}>Follow</button>
 			)}
 			{!isOwnProfile && isFollowingBool && (
-				<button onClick={handleUnfollow}>Unfollow</button>
+				<button className="bottomBtn" onClick={handleUnfollow}>Unfollow</button>
 			)}
-			<button onClick={handleGoToCollection}>
+			<button className="bottomBtn" onClick={handleGoToCollection}>
 				{currentProfile?.username || profileUsername}'s Collection
 			</button>
-			<button onClick={handleGoToListened}>
+			<button className="bottomBtn" onClick={handleGoToListened}>
 				{currentProfile?.username || profileUsername}'s Listened
 			</button>
-			<button onClick={() => navigate(`/user/${profileUsername}/followers`)}>
+			<button className="bottomBtn" onClick={() => navigate(`/user/${profileUsername}/followers`)}>
 				{followerCount} Followers
 			</button>
-			<button onClick={() => navigate(`/user/${profileUsername}/following`)}>
+			<button className="bottomBtn" onClick={() => navigate(`/user/${profileUsername}/following`)}>
 				{followingCount} Following
 			</button>
-			{isOwnProfile && <button onClick={handleSignOut}>Sign Out</button>}
+			{isOwnProfile && <button className="bottomBtn" onClick={handleSignOut}>Sign Out</button>}
 		</div>
 	);
 }
