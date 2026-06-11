@@ -7,6 +7,7 @@ import { getRatingsForUser } from "../supabase/ratings.js";
 import { getRatingByLabel } from "../func/ratings.js";
 import { getProfileImage } from "../supabase/users.js";
 import AlbumCard from "../components/AlbumCard/AlbumCard";
+import Header from '../components/Header/Header';
 import styles from "../css/Home.module.css";
 
 export default function Home() {
@@ -33,29 +34,14 @@ export default function Home() {
 		}
 		load();
 	}, [user]);
+
 	const handleWheel = (e) => {
 		e.currentTarget.scrollLeft += e.deltaY;
 	};
 
 	return (
-		<div className={styles.page}>
-			<header className={styles.header}>
-				<div className={styles.headerLeft}>
-					<img
-						src="/icon-192x192.png"
-						alt="Logo"
-						className={styles.logo}
-					/>
-					<span className={styles.logoText}>DiskKnight</span>
-				</div>
-				<img
-					src={profileImage || "/blank_profile-512x512.jpg"}
-					alt="Profile"
-					className={styles.avatar}
-					onClick={() => navigate(`/user/${username}`)}
-				/>
-			</header>
-
+		<div className="page">
+			<Header />
 			<div className={styles.searchButtons}>
 				<button
 					className={styles.searchBtn}

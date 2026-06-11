@@ -32,3 +32,34 @@ body {
 .bottomBtn:hover {
   background: #3b967e44;
 }
+.page {
+  min-height: 100vh;
+  max-width: 680px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+.albumList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 0 16px 32px;
+  align-items: start;
+}
+
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3b967e;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  z-index: 200;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}

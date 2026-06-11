@@ -14,6 +14,7 @@ import SortBar from "../components/SortBar/SortBar.jsx";
 import { handleListenLater, handleWant, handleCollect, handleListen } from "../func/handlers.js";
 import { isInListenLater } from "../supabase/listenLater.js";
 import { isInWant } from "../supabase/want.js";
+import Header from '../components/Header/Header';
 
 export default function CollectionPage() {
 	const { user } = useAuth();
@@ -89,19 +90,17 @@ export default function CollectionPage() {
 			);
 	});
 
+	if (!currentProfile) return null;
 	return (
-		<div>
-			<div className="Header">
-				<img src="/icon-192x192.png" alt="Logo" className="logo" />
-				<h1>Disk Knight</h1>
-			</div>
+		<div className="page">
+			<Header title={`${currentProfile?.username || profileUsername}'s Collection`} />
 			<HomeButton />
 			<h1>{currentProfile?.username || profileUsername}'s Collection</h1>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{collection.length === 0 && (
 				<p>No albums in your collection yet!</p>
 			)}
-			<div className={styles.albumList}>
+			<div className={"albumList"}>
 				{sorted.map((album) => (
 					<AlbumCard
 						key={album.id}
@@ -174,7 +173,7 @@ export default function CollectionPage() {
 				/>
 			)}
 			{statusMessage && (
-				<div onClick={() => setStatusMessage(null)}>
+				<div className="toast" onClick={() => setStatusMessage(null)}>
 					{statusMessage}
 				</div>
 			)}

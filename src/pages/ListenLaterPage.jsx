@@ -17,6 +17,7 @@ import { getRatingsForUser } from "../supabase/ratings.js";
 import { getRatingByLabel } from "../func/ratings.js";
 import { isInWant } from "../supabase/want.js";
 import SortBar from "../components/SortBar/SortBar.jsx";
+import Header from '../components/Header/Header';
 
 export default function ListenLaterPage() {
 	const { user } = useAuth();
@@ -79,16 +80,13 @@ export default function ListenLaterPage() {
 	});
 
 	return (
-		<div>
-			<div className="Header">
-				<img src="/icon-192x192.png" alt="Logo" className="logo" />
-				<h1>Disk Knight</h1>
-			</div>
+		<div className="page">
+			<Header title="Listen Later" />
 			<HomeButton />
 			<h1>Listen Later</h1>
 			<SortBar sortBy={sortBy} setSortBy={setSortBy} />
 			{listenLater.length === 0 && <p>Nothing here yet!</p>}
-			<div className={styles.albumList}>
+			<div className={"albumList"}>
 				{sorted.map((album) => (
 					<AlbumCard
 						key={album.id}

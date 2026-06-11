@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #72a698;
+  white-space: nowrap;
+}
+
+.pills {
+  display: flex;
+  gap: 8px;
+}
+
+.pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid #3b967e;
+  background: transparent;
+  color: #72a698;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pill:hover {
+  background: #3b967e22;
+  color: #6ac4ac;
+}
+
+.pillActive {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid #6ac4ac;
+  background: #6ac4ac22;
+  color: #6ac4ac;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
